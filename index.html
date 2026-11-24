@@ -217,6 +217,13 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
 #locpanel .foodrow .fbtn:disabled{opacity:.4;}
 #eatbanner{position:absolute; top:52px; left:50%; transform:translateX(-50%); z-index:26; display:none; background:rgba(23,17,48,.94); border:1.5px solid var(--gold); color:var(--ink); border-radius:999px; padding:7px 16px; font-weight:900; font-size:.85rem; white-space:nowrap;}
 #eatbanner.open{display:block;}
+#actbanner{position:absolute; top:52px; left:50%; transform:translateX(-50%); z-index:26; display:none; background:rgba(23,17,48,.94); border:1.5px solid var(--cyan); color:var(--ink); border-radius:999px; padding:7px 16px; font-weight:900; font-size:.85rem; white-space:nowrap;}
+#actbanner.open{display:block;}
+/* tombol aktivitas distrik: muncul saat pemain berdiri di lokasi yang punya aktivitas */
+#locactbtn{position:absolute; bottom:172px; left:50%; transform:translateX(-50%); display:none; z-index:29; background:var(--gold); color:#3a2a00; border:2px solid rgba(255,255,255,.65); border-radius:999px; padding:10px 20px; font-weight:900; font-size:.95rem; box-shadow:0 8px 22px rgba(0,0,0,.5); white-space:nowrap;}
+#locactbtn:active{transform:translateX(-50%) scale(.95);}
+/* garis status bahaya di kartu pacar (curiga / dingin / mau putus) */
+.dangerline{margin-top:8px; font-weight:900; font-size:.82rem; border-radius:10px; padding:6px 10px; line-height:1.4;}
 
 /* ---------- Panel samping kota: di mode kota tampil sebagai laci geser (blok MODE KOTA di akhir <style>) ---------- */
 #cityside{display:flex; flex-direction:column; gap:10px;}
@@ -348,6 +355,9 @@ body.in-city #modal .sheet{width:min(320px,86vw); max-width:none; height:100%; m
 body.in-city #meetbtn, body.in-city #interactbtn{left:auto; right:12px; transform:none;
   bottom:calc(76px + env(safe-area-inset-bottom)); font-size:.84rem; padding:8px 14px;}
 body.in-city #meetbtn:active, body.in-city #interactbtn:active{transform:scale(.95);}
+body.in-city #locactbtn{left:auto; right:12px; transform:none; bottom:calc(128px + env(safe-area-inset-bottom)); font-size:.84rem; padding:8px 14px;}
+body.in-city #locactbtn:active{transform:scale(.95);}
+body.in-city #actbanner{top:calc(114px + env(safe-area-inset-top)); font-size:.78rem; padding:5px 12px; background:rgba(23,17,48,.88);}
 
 /* --- Petunjuk awal: pil tipis tengah bawah, di atas pil tab --- */
 body.in-city #cityhint{bottom:calc(64px + env(safe-area-inset-bottom)); max-width:min(480px,58vw); background:rgba(23,17,48,.9);}
@@ -425,6 +435,7 @@ body.in-city #threadbox{height:52vh;}
     <p class="center" style="font-size:.85rem">Versi GitHub Pages (statis): progres tersimpan otomatis di browser/HP ini (localStorage). Tombol <b>Export HTML</b> di menu mengunduh satu file HTML utuh yang siap di-upload ke GitHub Pages.</p>
     <p class="center" style="font-size:.85rem">Gerak: <span class="kbd">W A S D</span> / joystick virtual besar. Geser layar kota untuk memutar kamera. <b>Ketuk gedung lokasi</b> untuk membuka panelnya dan ajak pacar kencan ke sana. Kotanya sekarang JAUH lebih luas (280×280) — distrik timur (🍜 Warung Bu Tini &amp; 🎡 Pasar Malam), distrik selatan (🏘️ Kampung Melati &amp; 🛶 Danau Biru), barat (🚉 Stasiun Kota), taman kota berair mancur, pantai berpayung, dan pusat kota bergedung tinggi. Di warung kamu bisa <b>makan beneran</b> dengan animasi menyuap. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — tapi PDKT berhasil baru jadi <b>🤝 Kenalan</b>: naikkan kedekatannya sampai 70% lewat chat, kencan &amp; hadiah, lalu <b>Tembak / Jadian</b> di tab Pacar.</p>
     <p class="center" style="font-size:.85rem">🎯 <b>Misi Harian:</b> tiap hari ada 3 misi (tombol 🎯 di atas). Selesaikan untuk dapat uang + affection + streak 🔥. Misi yang gagal saat hari berakhir menaikkan kecurigaan pacar dan memutus streak — laporan malam akan menampilkannya.</p>
+    <p class="center" style="font-size:.85rem">🚨 <b>Sekarang pacar BENAR-BENAR bisa memergokimu!</b> Suspicion penuh, dipergoki di lokasi yang sama, sidak mendadak, atau gosip antar-pacar memicu <b>adegan KONFRONTASI</b> — jawab dengan bohong, ngeles, minta maaf, atau jujur; peluangnya tergantung affection &amp; suspicion-nya. Pacar yang diabaikan berhari-hari affection-nya <b>turun terus</b> sampai dia <b>minta putus</b> — bujuk dia dengan hadiah, kencan mewah, atau maaf, atau terima putusnya. Tiap distrik juga punya <b>aktivitas khas</b> yang terlihat di layar: 🥥 nongkrong minum kelapa di Pantai, 🎡 jajan &amp; main di Pasar Malam, 🧺 piknik di Taman, 🎣 memancing di Danau, 🚆 naik kereta di Stasiun, dan banyak lagi!</p>
   </div>
 </div>
 
@@ -455,8 +466,10 @@ body.in-city #threadbox{height:52vh;}
         </div>
         <button id="interactbtn">💬 Sapa</button>
         <button id="meetbtn">💬 Ajak Kenalan</button>
+        <button id="locactbtn">🎉 Aktivitas</button>
         <div id="locpanel" role="dialog" aria-label="Panel lokasi"></div>
         <div id="eatbanner">🍽️ Sedang makan di Warung Bu Tini…</div>
+        <div id="actbanner">🎉 Sedang beraktivitas…</div>
         <div id="cityhint"><div class="row"><p id="cityhinttext">🗺️ <b>Kota diperluas!</b> 👆 <b>Ketuk gedung lokasi</b> untuk ajak kencan ke sana. 🍜 Di <b>Warung Bu Tini</b> (distrik timur) kamu bisa makan beneran. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — dekati dia!</p><button id="cityhintclose" aria-label="Tutup petunjuk">✕</button></div></div>
         <div id="joy" role="application" aria-label="Joystick gerak"><div id="joystick"></div></div>
         <button id="acttoggle" aria-label="Buka panel aksi">⚡<small>AKSI</small></button>
@@ -743,7 +756,13 @@ var EVENTS = [
   {title:"🎂 Ulang Tahun Bentrok", text:"Dua pacar ulang tahun di minggu yang sama! Kamu pontang-panting membagi waktu dan dompet.", apply:function(){ S.money=Math.max(0,S.money-100000); log("Ulang tahun bentrok: -Rp100.000"); }},
   {title:"📱 HP Hampir Terbongkar", text:"Salah satu pacar meminjam HP-mu untuk foto. Notifikasi chat dari pacar lain muncul… tapi dia tidak sempat membaca nama pengirimnya.", apply:function(){ var g=randomGf(); if(g) addSus(g, S.upgrades.hp2?2:10, true); }},
   {title:"💸 Bonus Kerja", text:"Bos senang dengan hasil kerjamu. Bonus cair!", apply:function(){ S.money+=150000; log("Bonus kerja: +Rp150.000"); }},
-  {title:"🤧 Kamu Kurang Fit", text:"Kecapekan mengelola banyak hati. Energi hari ini terasa berat.", apply:function(){ S.energy=Math.max(5,S.energy-25); }}
+  {title:"🤧 Kamu Kurang Fit", text:"Kecapekan mengelola banyak hati. Energi hari ini terasa berat.", apply:function(){ S.energy=Math.max(5,S.energy-25); }},
+  {title:"📹 Video Call Dadakan", text:"Salah satu pacar tiba-tiba minta video call pas kamu lagi di luar. Kamu lari ke tempat sepi sambil ngos-ngosan — dia tetap merasa kamu menyembunyikan sesuatu.", apply:function(){ var g=randomGf(); if(g) addSus(g, S.upgrades.hp2?3:11, true); }},
+  {title:"🗣️ Gosip Beredar", text:"Gosip soal seseorang misterius yang gonta-ganti pasangan beredar di kampus dan kantor. Dua pacarmu ikut mendengarnya.", apply:function(){ var a=randomGf(), b=randomGf(); if(a) addSus(a,7,true); if(b&&b!==a) addSus(b,7,true); }},
+  {title:"👀 Teman Pacar Memergoki", text:"Teman salah satu pacarmu mengaku melihatmu menggandeng orang lain di tempat umum — dan melaporkannya malam itu juga!", apply:function(){ var g=randomGf(); if(g) addSus(g,14,true); }},
+  {title:"📍 Lokasi Ke-Share", text:"Pacar influencermu tanpa sadar nge-share lokasi kencan kalian. Pacar-pacar lain yang kenal tempat itu jadi bertanya-tanya.", apply:function(){ eachGf(function(g){ if(g.pers!=="Influencer" && Math.random()<0.6) addSus(g,8,true); }); }},
+  {title:"🍜 Diminta Traktir Mendadak", text:"Salah satu pacar merajuk minta ditraktir makan enak malam ini juga. Dompetmu menjerit.", apply:function(){ if(S.money>=60000){ S.money-=60000; log("Traktir mendadak: -Rp60.000"); } else { var g=randomGf(); if(g){ addAff(g,-4); log("Uang pas-pasan, traktir dibatalkan — dia kecewa."); } } }},
+  {title:"💌 Mantan Nongol Lagi", text:"Mantan salah satu pacarmu muncul lagi mengajak balikan. Dia cerita ke kamu sambil cemburu — dan balik mencurigaimu.", apply:function(){ var g=randomGf(); if(g) addSus(g,6,true); }}
 ];
 
 /* ---------------- MISI HARIAN ----------------
@@ -825,7 +844,7 @@ function newGf(def){
     portrait:def.portrait, favLoc:def.favLoc, favGift:def.favGift, color:def.color||0xff8fab,
     aff: def.aff!=null?def.aff:55, sus: def.sus!=null?def.sus:8,
     loc: LOCATIONS[1+Math.floor(Math.random()*(LOCATIONS.length-1))].id,
-    lastContact: S?S.day:1, unread:0, thread:[], pendingQ:null, main: !!def.main, stage: def.stage||"pacar", gone:false, giftedToday:false };
+    lastContact: S?S.day:1, unread:0, thread:[], pendingQ:null, main: !!def.main, stage: def.stage||"pacar", gone:false, giftedToday:false, neglectDays:0, inDialog:false };
 }
 function defaultState(mode, gender){
   uidCounter = 1;
@@ -845,7 +864,7 @@ function save(){
 }
 function loadSave(){
   try{ var raw=localStorage.getItem(SAVE_KEY); if(!raw) return null;
-    var data=JSON.parse(raw); if(data && data.S && !data.S.over){ uidCounter=data.uid||100; if(data.S.gender!=="cewek"&&data.S.gender!=="cowok") data.S.gender="cowok"; /* Save lama (sebelum ada tahap kenalan): semua yang sudah ada = pacar resmi. */ data.S.gfs.forEach(function(g){ if(g.stage!=="kenalan"&&g.stage!=="pacar") g.stage="pacar"; }); if(!data.S.missions||!data.S.missions.length) data.S.missions=genMissions(data.S.day||1); if(data.S.missionStreak==null) data.S.missionStreak=0; if(data.S.caughtToday==null) data.S.caughtToday=false; if(data.S.totalMissionsDone==null) data.S.totalMissionsDone=0; return data.S; } }catch(e){}
+    var data=JSON.parse(raw); if(data && data.S && !data.S.over){ uidCounter=data.uid||100; if(data.S.gender!=="cewek"&&data.S.gender!=="cowok") data.S.gender="cowok"; /* Save lama (sebelum ada tahap kenalan): semua yang sudah ada = pacar resmi. */ data.S.gfs.forEach(function(g){ if(g.stage!=="kenalan"&&g.stage!=="pacar") g.stage="pacar"; }); if(!data.S.missions||!data.S.missions.length) data.S.missions=genMissions(data.S.day||1); if(data.S.missionStreak==null) data.S.missionStreak=0; if(data.S.caughtToday==null) data.S.caughtToday=false; if(data.S.totalMissionsDone==null) data.S.totalMissionsDone=0; data.S.gfs.forEach(function(g){ if(g.neglectDays==null) g.neglectDays=0; g.inDialog=false; }); return data.S; } }catch(e){}
   return null;
 }
 function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
@@ -870,7 +889,7 @@ function rankOf(n, gender){
   if(n>=12) return "Legenda Tanpa Jejak"; if(n>=8) return g==="cewek"? "Ratu Harem":"Raja Harem";
   if(n>=5) return "Master Hati"; if(n>=3) return g==="cewek"? "Playgirl Amatir":"Playboy Amatir"; return "Pemula";
 }
-function susMul(g){ var m=(PERSONALITIES[g.pers]||{}).susMul||1; if(S.upgrades.alibi) m*=0.7; return m; }
+function susMul(g){ var m=(PERSONALITIES[g.pers]||{}).susMul||1; if(S.upgrades.alibi) m*=0.7; var pc=partnerCount(); if(pc>3) m*=1+(pc-3)*0.09; return m; }
 function addAff(g,v){ g.aff=clamp(g.aff+v,0,100); }
 function addSus(g,v,silent){ g.sus=clamp(g.sus+v*susMul(g),0,100); if(!silent) renderAll(); }
 function portraitClass(g){ return "portrait p"+(g.portrait%8); }
@@ -882,7 +901,7 @@ function renderLog(){ $("logbox").innerHTML = S.log.length? S.log.map(function(l
 /* ---------------- MODAL ---------------- */
 function openModal(html){ $("modalsheet").innerHTML=html; $("modal").classList.add("open"); }
 function closeModal(){ $("modal").classList.remove("open"); }
-$("modal").addEventListener("click", function(e){ if(e.target===$("modal")) closeModal(); });
+$("modal").addEventListener("click", function(e){ if(e.target===$("modal")){ closeModal(); pumpDialogs(); } });
 
 /* ---------------- RENDER ---------------- */
 function renderHUD(){
@@ -899,8 +918,9 @@ function renderHUD(){
   $("hudmoney").textContent = fmtRp(S.money);
   var unread = aliveGfs().reduce(function(a,g){return a+g.unread;},0);
   $("chatbadge").style.display = unread? "inline-flex":"none"; $("chatbadge").textContent = unread;
-  $("gfbadge").style.display = aliveGfs().some(function(g){return g.sus>=70;})? "inline-flex":"none";
-  $("gfbadge").textContent = aliveGfs().filter(function(g){return g.sus>=70;}).length;
+  var dangerN = aliveGfs().filter(function(g){return g.sus>=70||(g.stage!=="kenalan"&&g.aff<=12);}).length;
+  $("gfbadge").style.display = dangerN? "inline-flex":"none";
+  $("gfbadge").textContent = dangerN;
 }
 function renderRoster(){
   var sort=$("sortsel").value;
@@ -923,10 +943,22 @@ function renderRoster(){
       ? '<div class="tembakbox"><p>Dia <b style="color:var(--ink)">belum pacarmu</b> — belum terhitung jumlah pacar &amp; rank. Naikkan kedekatan lewat balasan chat yang baik, ajak kencan, dan beri hadiah. Tembak saat kedekatan ≥ '+CONFESS_THRESHOLD+'% — di bawah itu dia akan menolak dan kedekatan turun 6.</p>'+
         '<button class="tembakbtn'+(g.aff>=CONFESS_THRESHOLD?' ready':'')+'" onclick="confessLove('+g.uid+')" aria-label="Tembak '+g.name+' jadi pacar (kedekatan '+Math.round(g.aff)+' persen)">💘 Tembak '+g.name+' / Jadian — Kedekatan '+Math.round(g.aff)+'%'+(g.aff>=CONFESS_THRESHOLD?' ✓ Siap!':' (butuh '+CONFESS_THRESHOLD+'%)')+'</button></div>'
       : '';
-    return '<div class="card"><div class="gfhead"><div class="'+portraitClass(g)+'" role="img" aria-label="Foto '+g.name+'"></div>'+
+    /* Garis status bahaya: siapa yang curiga, siapa yang dingin/mau putus —
+       terlihat jelas supaya pemain tahu siapa yang butuh perhatian. */
+    var statusHtml="";
+    if(!kenalan){
+      if(g.inDialog||g.aff<=12) statusHtml='<div class="dangerline" style="background:#5b1f2e;color:#ffb3c2">🚨 DIA MAU PUTUS — affection kritis! Chat, kencan, atau beri hadiah SEKARANG sebelum dia pergi.</div>';
+      else if(g.sus>=75) statusHtml='<div class="dangerline" style="background:#5b1f2e;color:#ffb3c2">🔴 SANGAT CURIGA — satu langkah lagi menuju KONFRONTASI! Tenangkan dia sekarang.</div>';
+      else if(g.sus>=55) statusHtml='<div class="dangerline" style="background:#57400f;color:#ffd97a">🟠 Dia mulai curiga — tenangkan dengan kencan, hadiah, atau balasan chat yang manis.</div>';
+      else if(g.aff<35||(g.neglectDays||0)>=2) statusHtml='<div class="dangerline" style="background:#1f3a5b;color:#a8d4ff">🥶 Lagi DINGIN — diabaikan '+(g.neglectDays||0)+' hari. Affection-nya terus turun tiap hari sampai dia minta putus!</div>';
+    } else if((g.neglectDays||0)>=2){
+      statusHtml='<div class="dangerline" style="background:#1f3a5b;color:#a8d4ff">🥶 Kenalan ini mulai dingin — diabaikan '+(g.neglectDays||0)+' hari, kedekatannya terus turun.</div>';
+    }
+    return '<div class="card"'+((!kenalan&&(g.sus>=75||g.aff<=12))?' style="border-color:var(--red)"':'')+'><div class="gfhead"><div class="'+portraitClass(g)+'" role="img" aria-label="Foto '+g.name+'"></div>'+
       '<div><h3>'+g.name+', '+g.age+(g.main?' ⭐':'')+'</h3><div class="sub">'+g.job+' • '+g.pers+' • sekarang di '+loc.icon+' '+loc.name+'</div>'+badge+'</div></div>'+
       '<div class="meter '+(kenalan?'kedek':'aff')+'"><span>'+(kenalan?'💞 Kedekatan':'❤️ Affection')+'</span><span class="bar"><i style="width:'+g.aff+'%"></i></span><span class="num">'+Math.round(g.aff)+'</span></div>'+
       '<div class="meter '+susCls+'"><span>👁 Suspicion</span><span class="bar"><i style="width:'+g.sus+'%"></i></span><span class="num">'+Math.round(g.sus)+'</span></div>'+
+      statusHtml+
       '<div class="gfdesc">'+(PERSONALITIES[g.pers]||{}).desc+' Suka kencan di '+locById(g.favLoc).name+', hadiah favorit: '+(gift?gift.icon+' '+gift.name:'-')+'. Terakhir kontak: hari ke-'+g.lastContact+'.</div>'+
       tembak+
       '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="chipbtn" onclick="quickChat('+g.uid+')">💬 Chat</button><button class="chipbtn" onclick="quickDate('+g.uid+')">❤️ Kencan</button></div></div>';
@@ -936,7 +968,7 @@ function renderChatList(){
   var list=aliveGfs().slice().sort(function(a,b){return b.unread-a.unread || b.sus-a.sus;});
   $("chatlist").innerHTML = list.length? list.map(function(g){
     var last=g.thread.length? g.thread[g.thread.length-1].text : "Belum ada chat. Sapa dia duluan!";
-    return '<button class="chatitem" onclick="openThread('+g.uid+')"><div class="'+portraitClass(g)+'"></div><div class="grow"><div class="nm">'+g.name+(g.main?' ⭐':'')+(g.stage==="kenalan"?' 🤝':'')+'</div><div class="pv">'+last+'</div></div>'+(g.unread?'<span class="badge">'+g.unread+'</span>':'')+'</button>';
+    return '<button class="chatitem" onclick="openThread('+g.uid+')"><div class="'+portraitClass(g)+'"></div><div class="grow"><div class="nm">'+g.name+(g.main?' ⭐':'')+(g.stage==="kenalan"?' 🤝':'')+((g.neglectDays||0)>=2?' 🥶':'')+(g.sus>=75?' 🔴':'')+(g.stage!=="kenalan"&&g.aff<=12?' 🚨':'')+'</div><div class="pv">'+last+'</div></div>'+(g.unread?'<span class="badge">'+g.unread+'</span>':'')+'</button>';
   }).join("") : '<div class="card center"><p>Tidak ada pacar untuk di-chat.</p></div>';
 }
 var currentThreadUid=null;
@@ -973,7 +1005,7 @@ function renderShop(){
     return '<div class="shopitem"><div class="ic">'+u.icon+'</div><b>'+u.name+'</b><span class="pr">'+(owned?'✅ Dimiliki':fmtRp(u.price))+'</span><small>'+u.desc+'</small><button onclick="buyUpgrade(\''+u.id+'\')" '+((owned||S.money<u.price)?'disabled':'')+'>'+(owned?'Sudah Punya':'Beli')+'</button></div>';
   }).join("");
 }
-function renderAll(){ if(!S) return; document.body.classList.toggle("gm", S.gender==="cewek"); renderHUD(); renderRoster(); renderChatList(); renderShop(); renderLog(); if(currentThreadUid && $("threadwrap").style.display!=="none") renderThread(); }
+function renderAll(){ if(!S) return; document.body.classList.toggle("gm", S.gender==="cewek"); renderHUD(); renderRoster(); renderChatList(); renderShop(); renderLog(); if(currentThreadUid && $("threadwrap").style.display!=="none") renderThread(); checkSusWarnings(); }
 
 /* ---------------- CHAT LOGIC ---------------- */
 function pushMsg(g, from, text){ g.thread.push({from:from, text:text}); if(g.thread.length>60) g.thread.splice(0, g.thread.length-60); }
@@ -993,7 +1025,7 @@ function replyChat(uid, idx){
   var o=g.pendingQ.opts[idx]; g.pendingQ=null;
   pushMsg(g,"me",o.t);
   /* Risiko salah kirim */
-  if(aliveGfs().length>1 && !S.upgrades.hp2 && Math.random()<0.08){
+  if(aliveGfs().length>1 && !S.upgrades.hp2 && Math.random()<(0.08+Math.max(0,partnerCount()-3)*0.015)){
     var other=randomGf(); if(other && other.uid!==g.uid){
       pushMsg(g,"sys","⚠️ SALAH KIRIM! Pesan ini nyasar ke HP "+other.name+" juga!");
       pushMsg(other,"her","Eh, pesan barusan maksudnya apa?? 😡");
@@ -1010,7 +1042,7 @@ function replyChat(uid, idx){
   var reacts=["Makasih ya sayang 🥰","Hmm, oke deh…","Kamu selalu tahu cara bikin aku senyum ❤️","Ya udah, hati-hati ya!"];
   pushMsg(g,"her", o.aff>=4? reacts[Math.floor(Math.random()*2)+ (Math.random()<.5?0:1)] : o.aff<0? "Oh. Gitu ya. 😒" : reacts[1]);
   checkGfState(g);
-  renderAll(); save();
+  renderAll(); save(); pumpDialogs();
 }
 function quickChat(uid){ switchView("phone"); openThread(uid); var g=gfByUid(uid); if(g && !g.pendingQ && g.thread.length===0) startChat(uid); }
 function quickDate(uid){ openDatePicker(uid); }
@@ -1030,6 +1062,8 @@ function openLocPanel(locId, keepEat){
     (isKos? '<button class="datebtn" disabled>Ini kosmu — bukan tempat kencan</button>'
           : '<button class="datebtn" onclick="locPanelDate()" '+(aliveGfs().length? "":"disabled")+'>❤️ Ajak Pacar Kencan ke Sini</button>');
   if(locId==="warung") html+=warungMenuHtml();
+  var actHere=activityForLoc(locId);
+  if(actHere) html+='<div style="border-top:1.5px solid var(--line);margin-top:12px;padding-top:10px"><h3 style="font-size:.98rem">'+actHere.icon+' Aktivitas di Sini: '+actHere.name+'</h3><p>'+actHere.desc+'</p><div class="chips"><span>💰 '+fmtRp(actHere.cost)+'</span><span>'+(actHere.slot?'🕐 1 slot':'🕐 Gratis slot')+'</span><span>🧍 Energi +'+actHere.soloEnergy+'</span><span>💘 Bareng: +'+actHere.affGain+'</span></div><button class="datebtn" style="background:var(--gold);color:#3a2a00" onclick="closeLocPanel();openActivity(\''+locId+'\')">'+actHere.icon+' Lakukan Aktivitas Ini</button></div>';
   var p=$("locpanel"); p.innerHTML=html; p.classList.add("open");
   window.__locPanelOpen=true;
 }
@@ -1065,7 +1099,7 @@ function setEatWith(uid){ eatWithUid=uid; if(locPanelLoc) openLocPanel(locPanelL
    Ada fallback timer supaya efek tetap tercatat bila 3D tidak termuat. */
 var pendingEat=null, eatApplied=true, eatFallbackTimer=null, eatingNow=false;
 function startEat(foodId){
-  if(!S||S.over||pendingEat) return;
+  if(!S||S.over||pendingEat||activityBusy) return;
   var food=foodById(foodId);
   var partner=eatWithUid!=null? gfByUid(eatWithUid):null;
   if(eatWithUid!=null && !partner) partner=null;
@@ -1106,9 +1140,109 @@ function finishEat(){
     log("Makan "+food.name+" di Warung Bu Tini. Energi +"+food.energy+", perut kenyang, hati tenang.");
     toast(food.icon+" "+food.name+" habis! Energi +"+food.energy+".");
   }
-  renderAll(); save();
+  renderAll(); save(); pumpDialogs();
 }
 window.__onEatDone=function(){ finishEat(); };
+
+/* ---------------- AKTIVITAS DISTRIK ----------------
+   Tiap distrik punya aktivitas khas yang KELIHATAN di layar: tombol emas
+   muncul saat pemain berdiri di lokasinya (dan ada di panel lokasi).
+   Pemain (dan pacar bila bareng) duduk/berdiri di titik aktivitas dengan
+   animasi ±4 detik. Sendiri = pulihkan energi; bareng = affection naik.
+   Bareng pacar di lokasi yang ada pacar lain = risiko DIPERGOKI. */
+var ACTIVITIES = [
+  {loc:"pantai", icon:"🥥", name:"Nongkrong Minum Kelapa", cost:15000, slot:0, soloEnergy:16, affGain:9, pose:"sit", dx:3, dz:5, desc:"Duduk di kursi pantai di bawah payung, minum kelapa muda segar dari gubuk kelapa sambil menatap laut & sunset."},
+  {loc:"pasar", icon:"🎡", name:"Jajan & Main Games", cost:35000, slot:1, soloEnergy:8, affGain:12, pose:"stand", dx:0, dz:3, desc:"Keliling stan pasar malam: jajan, main lempar gelang, foto di bawah lampion & bianglala yang berputar."},
+  {loc:"taman", icon:"🧺", name:"Piknik di Taman", cost:20000, slot:0, soloEnergy:12, affGain:10, pose:"sit", dx:4.5, dz:3, desc:"Gelar tikar piknik dekat air mancur, makan bekal, santai di atas rumput di antara bunga-bunga."},
+  {loc:"danau", icon:"🎣", name:"Memancing & Naik Perahu", cost:10000, slot:1, soloEnergy:14, affGain:13, pose:"sit", dx:2, dz:10, desc:"Duduk di ujung dermaga memancing ikan danau, lalu naik perahu bebek mengelilingi Danau Biru."},
+  {loc:"stasiun", icon:"🚆", name:"Naik Kereta Jalan-Jalan", cost:25000, slot:1, soloEnergy:10, affGain:11, pose:"sit", dx:0, dz:7, desc:"Duduk di peron menunggu kereta, lalu jalan-jalan naik kereta wisata keliling pinggir kota."},
+  {loc:"kafe", icon:"☕", name:"Ngopi Santai", cost:25000, slot:0, soloEnergy:12, affGain:9, pose:"sit", dx:2.5, dz:4.5, desc:"Ngopi di meja luar Kafe Senja di bawah payung kecil, ngobrol santai tanpa buru-buru."},
+  {loc:"mal", icon:"🛍️", name:"Window Shopping & Foto", cost:20000, slot:1, soloEnergy:6, affGain:12, pose:"stand", dx:2.2, dz:4.2, desc:"Keliling deretan toko warna-warni di depan mal, coba-coba baju, dan foto-foto di spot terang."},
+  {loc:"alun", icon:"📸", name:"Foto-Foto di Monumen", cost:0, slot:0, soloEnergy:8, affGain:9, pose:"stand", dx:3.5, dz:6, desc:"Foto-foto di depan monumen & bola lampu Alun-Alun Pusat Kota yang menyala warna-warni."},
+  {loc:"kampus", icon:"📚", name:"Nongkrong Kantin Kampus", cost:10000, slot:0, soloEnergy:10, affGain:8, pose:"sit", dx:0, dz:5, desc:"Nongkrong di kantin kampus lewat gerbang besarnya — murah, ramai, dan penuh cerita."}
+];
+function activityForLoc(locId){ for(var i=0;i<ACTIVITIES.length;i++) if(ACTIVITIES[i].loc===locId) return ACTIVITIES[i]; return null; }
+function openActivity(locId){
+  if(!S||S.over) return;
+  var act=activityForLoc(locId); if(!act) return;
+  var loc=locById(locId);
+  var others=aliveGfs().filter(function(g){return g.loc===locId;});
+  var html="<h2>"+act.icon+" "+act.name+"</h2><p>"+act.desc+"</p>"+
+    "<p>📍 "+loc.icon+" "+loc.name+" • 💰 "+fmtRp(act.cost)+" • "+(act.slot? "🕐 Memakai 1 slot":"🕐 Gratis slot (tidak memakai waktu)")+"</p>"+
+    (others.length? "<p style='color:var(--orange);font-weight:800'>👀 Sedang di sini: "+others.map(function(g){return g.name;}).join(", ")+" — aktivitas bareng pacar LAIN di sini berisiko dipergoki!</p>":"")+
+    '<button class="bigbtn" onclick="startActivity(\''+locId+'\',null)">🧍 Sendiri — ⚡ Energi +'+act.soloEnergy+'</button>'+
+    '<button class="bigbtn gold" onclick="openActivityPartner(\''+locId+'\')">💘 Bareng Pacar/Kenalan — ❤️ Affection/Kedekatan +'+act.affGain+'</button>'+
+    '<button class="bigbtn alt" onclick="closeModal()">Nanti Dulu</button>';
+  openModal(html);
+}
+function openActivityPartner(locId){
+  var act=activityForLoc(locId); if(!act) return;
+  var list=aliveGfs();
+  if(!list.length){ toast("Belum ada pacar/kenalan untuk diajak."); return; }
+  var html="<h2>"+act.icon+" "+act.name+" — bareng siapa?</h2><p>Affection/kedekatannya naik +"+act.affGain+". Hati-hati: pacar lain yang sedang di "+locById(locId).name+" bisa memergoki kalian!</p>";
+  html+=list.map(function(g){
+    var wit=aliveGfs().some(function(o){return o.uid!==g.uid && o.loc===locId;});
+    return '<button class="pickbtn" onclick="startActivity(\''+locId+'\','+g.uid+')"><div class="'+portraitClass(g)+'"></div><div>'+g.name+(g.stage==="kenalan"?' 🤝':'')+' <small>❤️'+Math.round(g.aff)+' • 👁'+Math.round(g.sus)+(wit?' • ⚠️ ADA PACAR LAIN DI SINI!':'')+'</small></div></button>';
+  }).join("");
+  html+='<button class="bigbtn alt" onclick="openActivity(\''+locId+'\')">← Kembali</button>';
+  openModal(html);
+}
+var pendingActivity=null, activityApplied=true, activityFallbackTimer=null, activityBusy=false;
+function startActivity(locId, partnerUid){
+  if(!S||S.over||activityBusy||pendingEat) return;
+  var act=activityForLoc(locId); if(!act) return;
+  var partner=partnerUid!=null? gfByUid(partnerUid):null;
+  if(partnerUid!=null && !partner){ toast("Orang itu sudah pergi."); return; }
+  if(S.money<act.cost){ toast("Uang tidak cukup ("+fmtRp(act.cost)+"). Kerja dulu!"); return; }
+  if(act.slot && partner && !needSlot()) return;
+  if(eatingNow){ toast("🍽️ Sedang makan… tunggu sampai selesai."); return; }
+  closeModal(); closeLocPanel();
+  pendingActivity={locId:locId, partnerUid:partner?partner.uid:null};
+  activityApplied=false; activityBusy=true;
+  var loc=locById(locId);
+  $("actbanner").textContent=act.icon+" "+act.name+" di "+loc.name+"…";
+  $("actbanner").classList.add("open");
+  if(typeof window.__startActivityAnim==="function"){
+    window.__startActivityAnim({ x:loc.x+act.dx, z:loc.z+act.dz, pose:act.pose, partner: partner? {uid:partner.uid, name:partner.name, color:partner.color, portrait:partner.portrait} : null });
+    activityFallbackTimer=setTimeout(finishActivity, 7000);
+  } else {
+    activityFallbackTimer=setTimeout(finishActivity, 600);
+  }
+}
+function finishActivity(){
+  if(activityApplied||!pendingActivity) return;
+  activityApplied=true; activityBusy=false;
+  if(activityFallbackTimer){ clearTimeout(activityFallbackTimer); activityFallbackTimer=null; }
+  var pa=pendingActivity; pendingActivity=null;
+  $("actbanner").classList.remove("open");
+  var act=activityForLoc(pa.locId), loc=locById(pa.locId);
+  var partner=pa.partnerUid!=null? gfByUid(pa.partnerUid):null;
+  S.money-=act.cost;
+  if(partner){
+    addAff(partner, act.affGain*(PERSONALITIES[partner.pers].affMul||1)); addSus(partner,-3,true);
+    partner.lastContact=S.day; partner.neglectDays=0;
+    log(act.icon+" "+act.name+" bareng "+partner.name+" di "+loc.name+": "+meterLabel(partner).toLowerCase()+" +"+act.affGain+".");
+    toast(act.icon+" Seru! "+meterLabel(partner)+" "+partner.name+" +"+act.affGain);
+    var others=aliveGfs().filter(function(o){return o.uid!==partner.uid && o.loc===pa.locId;});
+    if(others.length && Math.random()<0.45){
+      var wit=others[0];
+      addSus(wit,24,true);
+      if(wit.stage!=="kenalan" && !wit.inDialog){
+        wit.sus=Math.max(wit.sus,94);
+        queueConfrontation(wit, "👀 "+wit.name+" melihatmu "+act.name.toLowerCase()+" berdua dengan "+partner.name+" di "+loc.name+" — persis di depan matanya!");
+      } else checkGfState(wit);
+      toast("🚨 "+wit.name+" melihat kalian!");
+    }
+  } else {
+    S.energy=clamp(S.energy+act.soloEnergy,0,100);
+    log(act.icon+" "+act.name+" sendirian di "+loc.name+": energi +"+act.soloEnergy+".");
+    toast(act.icon+" "+act.name+" selesai! Energi +"+act.soloEnergy);
+  }
+  renderAll(); save();
+  if(act.slot) consumeSlot();
+  pumpDialogs();
+}
+window.__onActivityDone=function(){ finishActivity(); };
 function closeLocPanel(){ locPanelLoc=null; $("locpanel").classList.remove("open"); window.__locPanelOpen=false; }
 function locPanelDate(){
   var locId=locPanelLoc; closeLocPanel();
@@ -1128,28 +1262,43 @@ function checkGfState(g){
     renderAll(); save();
     return;
   }
-  if(g.sus>=100){
-    g.gone=true; S.totalCaught++; S.caughtThisWeek++; S.caughtToday=true;
-    if(S.missions) S.missions.forEach(function(m){ if(m.type==="safe"&&!m.done) m.failed=true; });
-    pushMsg(g,"her","AKU TAHU SEMUANYA. KITA PUTUS. 😡💔");
-    log("💔 KETAHUAN! "+g.name+" memergokimu dan putus!");
-    toast("💔 KETAHUAN oleh "+g.name+"!");
-    if(aliveGfs().length && Math.random()<0.35){
-      var other=randomGf(); addSus(other,18,true);
-      log(g.name+" membocorkan ke "+other.name+". Suspicion-nya melonjak!");
-    }
-    afterLoss();
-  } else if(g.aff<=0){
-    g.gone=true;
-    if(g.stage==="kenalan"){
-      log("👋 Kenalan "+g.name+" pergi (kedekatan habis).");
+  if(g.stage==="kenalan"){
+    if(g.aff<=0){
+      g.gone=true;
+      log("👋 Kenalan "+g.name+" pergi (kedekatan habis — terlalu lama diabaikan).");
       toast(g.name+" pergi… kedekatan habis.");
-    } else {
-      log("💔 "+g.name+" pergi karena merasa tidak diperhatikan (affection habis).");
-      toast(g.name+" pergi… affection habis.");
+      afterLoss();
     }
-    afterLoss();
+    return;
   }
+  /* PACAR RESMI:
+     • Suspicion 100 TIDAK lagi langsung putus — dia MENGKONFRONTASImu dulu
+       dan kamu dapat kesempatan menjawab (bohong / ngeles / maaf / jujur).
+     • Affection habis TIDAK lagi hilang diam-diam — dia MINTA PUTUS lewat
+       dialog dan kamu bisa mencoba mempertahankannya. */
+  if(g.sus>=100 && !g.inDialog){
+    g.sus=92;
+    queueConfrontation(g, "🚨 "+g.name+" menemukan bukti-bukti janggal — chat yang belum dihapus, foto yang tidak cocok, dan cerita yang berubah-ubah. Dia menuntut penjelasan SEKARANG.");
+    pumpDialogs();
+  }
+  else if(g.aff<=0 && !g.inDialog){
+    g.aff=1;
+    queueBreakup(g);
+    pumpDialogs();
+  }
+}
+/* Putus karena KETAHUAN (konfrontasi gagal total / kebohongan terbongkar):
+   terhitung ketahuan, bisa menyebar ke pacar lain. */
+function caughtBreakup(g){
+  g.gone=true; g.inDialog=false; S.totalCaught++; S.caughtThisWeek++; S.caughtToday=true;
+  if(S.missions) S.missions.forEach(function(m){ if(m.type==="safe"&&!m.done) m.failed=true; });
+  pushMsg(g,"her","AKU TAHU SEMUANYA. KITA PUTUS. 😡💔");
+  log("💔 KETAHUAN! "+g.name+" memergokimu dan putus!");
+  toast("💔 KETAHUAN oleh "+g.name+"!");
+  if(aliveGfs().length && Math.random()<0.35){
+    var other=randomGf(); if(other){ addSus(other,18,true); log(g.name+" membocorkan ke "+other.name+". Suspicion-nya melonjak!"); }
+  }
+  afterLoss();
 }
 function afterLoss(){
   if(aliveGfs().length===0){ endGame(false, "Semua pacar pergi. Kamu resmi jomblo kembali."); return; }
@@ -1157,11 +1306,185 @@ function afterLoss(){
   renderAll(); save();
 }
 
+/* ---------------- KONFRONTASI & DIALOG PUTUS ----------------
+   Suspicion penuh, dipergoki saksi, sidak, dan gosip antar-pacar semuanya
+   masuk antrean konfrontasi; affection habis masuk antrean dialog putus.
+   Dialog diproses satu per satu lewat pumpDialogs() — selama endDay
+   berjalan, deferDialogs menahan antrean supaya Laporan Malam tidak
+   tertimpa (dialogAfter membuka laporan setelah antrean kosong). */
+var confrontationQueue=[], breakupQueue=[], dialogAfter=null, deferDialogs=false;
+function queueConfrontation(g, context){
+  if(!g||g.gone||g.inDialog||g.stage==="kenalan") return;
+  g.inDialog=true;
+  confrontationQueue.push({uid:g.uid, context:context});
+}
+function queueBreakup(g){
+  if(!g||g.gone||g.inDialog||g.stage==="kenalan") return;
+  g.inDialog=true;
+  breakupQueue.push({uid:g.uid});
+}
+function pumpDialogs(){
+  if(!S||deferDialogs) return;
+  if(S.over){ confrontationQueue=[]; breakupQueue=[]; dialogAfter=null; return; }
+  if($("modal").classList.contains("open")) return;
+  if(confrontationQueue.length){ showConfrontation(confrontationQueue.shift()); return; }
+  if(breakupQueue.length){ showBreakup(breakupQueue.shift()); return; }
+  if(dialogAfter){ var f=dialogAfter; dialogAfter=null; f(); }
+}
+/* Peluang tiap jawaban dipengaruhi affection (dia masih sayang = lebih mudah
+   percaya), suspicion (makin curiga = makin susah dibohongi), dan HP Kedua. */
+function confrontationChances(g){
+  var hp=S.upgrades.hp2?0.08:0;
+  return {
+    lie:    clamp(0.55+(g.aff-50)*0.004-g.sus*0.002+hp, 0.15, 0.92),
+    dodge:  clamp(0.43+(g.aff-50)*0.004-g.sus*0.002+hp, 0.12, 0.88),
+    sorry:  clamp(0.35+g.aff*0.005, 0.20, 0.85),
+    honest: g.aff>=70? 0.50 : 0.18
+  };
+}
+function showConfrontation(item){
+  var g=gfByUid(item.uid);
+  if(!g||g.gone||S.over){ if(g) g.inDialog=false; pumpDialogs(); return; }
+  var ch=confrontationChances(g);
+  function pct(v){ return Math.round(v*100)+"%"; }
+  var html="<h2>🚨 KONFRONTASI!</h2><p>"+item.context+"</p>"+
+    "<p>"+g.name+" menatapmu tajam. <b style='color:var(--ink)'>❤️ Affection "+Math.round(g.aff)+" • 👁 Suspicion "+Math.round(g.sus)+"</b> — jawabanmu menentukan nasib hubungan ini. Gagal total = PUTUS dan terhitung KETAHUAN.</p>"+
+    '<button class="bigbtn" onclick="resolveConfrontation('+g.uid+',\'lie\')">🤥 Bohong — "Itu cuma teman biasa!"<small style="display:block;font-weight:700;opacity:.85">Peluang dipercaya ±'+pct(ch.lie)+' • gagal bisa langsung terbongkar</small></button>'+
+    '<button class="bigbtn alt" onclick="resolveConfrontation('+g.uid+',\'dodge\')">🙄 Ngeles — "Kamu salah lihat, udah ah."<small style="display:block;font-weight:700;opacity:.85">Peluang ±'+pct(ch.dodge)+' • gagal pun jarang langsung putus, tapi dia makin marah</small></button>'+
+    '<button class="bigbtn alt" onclick="resolveConfrontation('+g.uid+',\'sorry\')">🙏 Minta Maaf — "Maaf… aku khilaf."<small style="display:block;font-weight:700;opacity:.85">Peluang ±'+pct(ch.sorry)+' • dimaafkan pun affection tetap jatuh</small></button>'+
+    '<button class="bigbtn alt" onclick="resolveConfrontation('+g.uid+',\'honest\')">😶 Jujur — akui semuanya<small style="display:block;font-weight:700;opacity:.85">Peluang ±'+pct(ch.honest)+' • hanya berhasil kalau dia benar-benar sayang kamu</small></button>';
+  openModal(html);
+}
+function resolveConfrontation(uid, choice){
+  var g=gfByUid(uid); closeModal();
+  if(!g||g.gone){ pumpDialogs(); return; }
+  g.inDialog=false;
+  var ch=confrontationChances(g);
+  var ok=Math.random()<ch[choice];
+  if(choice==="lie"){
+    if(ok){ g.sus=48; addAff(g,-4); pushMsg(g,"her","Hmm… ya udah deh, aku percaya. Tapi jangan aneh-aneh ya."); log("🤥 Kamu berbohong ke "+g.name+" dan dia percaya (untuk sekarang). Suspicion turun ke 48, affection -4."); toast("😮‍💨 "+g.name+" percaya… kali ini."); }
+    else if(Math.random()<0.55){ log("🤥 Kebohonganmu ke "+g.name+" TERBONGKAR di tempat."); caughtBreakup(g); }
+    else { g.sus=95; addAff(g,-22); log("🤥 "+g.name+" tidak menelan kebohonganmu mentah-mentah. Affection anjlok -22, suspicion membara di 95."); toast("😡 "+g.name+" makin marah!"); }
+  } else if(choice==="dodge"){
+    if(ok){ g.sus=58; addAff(g,-2); pushMsg(g,"her","Hmph. Ya udah, lupakan."); log("🙄 Kamu ngeles dari "+g.name+" dan topiknya ganti. Suspicion turun ke 58."); toast("🙄 Lolos… untuk sekarang."); }
+    else { g.sus=clamp(g.sus+8,0,97); addAff(g,-15); log("🙄 Ngelesmu bikin "+g.name+" makin kesal. Affection -15, suspicion naik."); toast("😤 Dia makin kesal!"); }
+  } else if(choice==="sorry"){
+    if(ok){ g.sus=40; addAff(g,-10); pushMsg(g,"her","…Aku maafin. Tapi kepercayaan itu dibangun lagi dari nol, paham?"); log("🙏 "+g.name+" memaafkanmu. Suspicion turun ke 40, affection -10 (kecewa)."); toast("🙏 Dimaafkan — jaga baik-baik."); }
+    else if(Math.random()<0.25){ log("🙏 Maafmu ditolak mentah-mentah oleh "+g.name+"."); caughtBreakup(g); }
+    else { g.sus=90; addAff(g,-18); log("🙏 "+g.name+" belum bisa memaafkan. Affection -18, suspicion 90."); toast("💔 Dia belum bisa memaafkan…"); }
+  } else { /* honest */
+    if(ok){ g.sus=30; addAff(g,-6); pushMsg(g,"her","Kamu jujur… itu menyakitkan, tapi aku hargai. Kita perbaiki ya."); log("😶 Kejujuranmu dihargai "+g.name+". Suspicion turun ke 30, affection -6."); toast("💖 Dia menghargai kejujuranmu!"); }
+    else { log("😶 Kejujuranmu justru mengakhiri hubungan dengan "+g.name+"."); caughtBreakup(g); }
+  }
+  renderAll(); save(); pumpDialogs();
+}
+/* ---------------- DIALOG MINTA PUTUS ----------------
+   Affection habis → dia minta putus LEWAT DIALOG. Pemain bisa membujuk:
+   hadiah terbaik / kencan mewah darurat / minta maaf — peluang berhasil
+   mengikuti sisa affection. Atau terima putusnya (pergi baik-baik, bukan
+   ketahuan, tapi jumlah pacar & rank turun). */
+function breakupChances(g){
+  return {
+    gift:  clamp(0.20+g.aff*0.008+0.30, 0.10, 0.88),
+    date:  clamp(0.20+g.aff*0.008+0.35, 0.10, 0.90),
+    sorry: clamp(0.20+g.aff*0.008+0.05, 0.08, 0.80)
+  };
+}
+function bestAffordableGift(){
+  var best=null;
+  GIFTS.forEach(function(it){ if(S.money>=it.price && (!best||it.price>best.price)) best=it; });
+  return best;
+}
+function showBreakup(item){
+  var g=gfByUid(item.uid);
+  if(!g||g.gone||S.over){ if(g) g.inDialog=false; pumpDialogs(); return; }
+  var ch=breakupChances(g);
+  var bg=bestAffordableGift();
+  function pct(v){ return Math.round(v*100)+"%"; }
+  var html="<h2>💔 "+g.name+" Minta Putus</h2>"+
+    "<p>\"Aku capek. Kamu jarang ada buat aku — chat nggak dibalas, kencan nggak pernah. Affection-ku ke kamu tinggal <b style='color:var(--ink)'>"+Math.round(g.aff)+"</b>. Kayaknya kita udahan aja…\"</p>"+
+    "<p>Dia "+(g.neglectDays>=2? "sudah <b style='color:var(--ink)'>"+g.neglectDays+" hari</b> merasa diabaikan. ":"")+"Bujuk dia sekarang, atau terima putusnya — dia akan hilang dari roster dan jumlah pacar (serta rank) ikut turun.</p>"+
+    '<button class="bigbtn" onclick="resolveBreakup('+g.uid+',\'gift\')" '+((bg&&!g.giftedToday)?"":"disabled")+'>🎁 Beri '+(bg? bg.icon+" "+bg.name+" ("+fmtRp(bg.price)+")":"Hadiah")+'<small style="display:block;font-weight:700;opacity:.85">'+(g.giftedToday? "Dia sudah menerima hadiah hari ini": bg? "Peluang bertahan ±"+pct(ch.gift) : "Uangmu tidak cukup untuk hadiah apa pun")+'</small></button>'+
+    '<button class="bigbtn gold" onclick="resolveBreakup('+g.uid+',\'date\')" '+(S.money>=150000?"":"disabled")+'>🍽️ Ajak Kencan Mewah SEKARANG ('+fmtRp(150000)+')<small style="display:block;font-weight:700;opacity:.85">Peluang bertahan ±'+pct(ch.date)+(S.money>=150000?"":" • uang tidak cukup")+'</small></button>'+
+    '<button class="bigbtn alt" onclick="resolveBreakup('+g.uid+',\'sorry\')">🙏 Minta Maaf & Janji Berubah (gratis)<small style="display:block;font-weight:700;opacity:.85">Peluang bertahan ±'+pct(ch.sorry)+'</small></button>'+
+    '<button class="bigbtn alt" onclick="resolveBreakup('+g.uid+',\'accept\')">💔 Terima Putusnya<small style="display:block;font-weight:700;opacity:.85">Dia pergi baik-baik — bukan ketahuan, tapi pacar & rank berkurang</small></button>';
+  openModal(html);
+}
+function resolveBreakup(uid, opt){
+  var g=gfByUid(uid); closeModal();
+  if(!g||g.gone){ pumpDialogs(); return; }
+  g.inDialog=false;
+  if(opt==="accept"){
+    g.gone=true;
+    pushMsg(g,"her","Ya udah. Kita putus baik-baik ya. Jaga diri.");
+    log("💔 Kamu menerima putusnya "+g.name+". Dia pergi baik-baik — jumlah pacar & rank turun.");
+    toast(g.name+" pergi baik-baik…");
+    afterLoss(); renderAll(); save(); pumpDialogs(); return;
+  }
+  var ch=breakupChances(g), cost=0;
+  if(opt==="gift"){ var bg=bestAffordableGift(); if(bg && !g.giftedToday){ cost=bg.price; } }
+  if(opt==="date"){ cost=150000; }
+  if(cost>0 && S.money<cost){ toast("Uang tidak cukup untuk bujukan itu!"); g.inDialog=true; breakupQueue.unshift({uid:g.uid}); pumpDialogs(); return; }
+  if(cost>0) S.money-=cost;
+  if(opt==="gift") g.giftedToday=true;
+  var ok=Math.random()<ch[opt];
+  if(ok){
+    g.aff=34; g.sus=clamp(g.sus-12,0,100); g.neglectDays=0; g.lastContact=S.day;
+    if(opt==="date") movePlayerTo(locById("resto"));
+    pushMsg(g,"her","…Makasih ya. Aku kasih kesempatan lagi. Jangan diulang, janji?");
+    log("💖 Kamu berhasil mempertahankan "+g.name+" ("+(opt==="gift"?"hadiah":opt==="date"?"kencan mewah darurat":"minta maaf")+")! Affection pulih ke 34 — jaga dia baik-baik kali ini.");
+    toast("💖 "+g.name+" memberimu kesempatan lagi!");
+  } else {
+    g.gone=true;
+    pushMsg(g,"her","Nggak. Aku sudah bulat. Selamat tinggal.");
+    log("💔 Bujukanmu ditolak — "+g.name+" benar-benar pergi. Jumlah pacar & rank turun.");
+    toast("💔 "+g.name+" tetap pergi…");
+    afterLoss();
+  }
+  renderAll(); save(); pumpDialogs();
+}
+/* ---------------- SIDAK ----------------
+   Sesekali setelah slot berganti, seorang pacar datang TIBA-TIBA mencarimu
+   (NPC-nya muncul di sampingmu). Kalau ada pacar lain di dekatmu saat itu
+   juga → KONFRONTASI. Kalau aman → momen manis, affection +4. */
+function maybeSidak(){
+  if(!S||S.over||deferDialogs||eatingNow||activityBusy) return;
+  var pool=partnerGfs(); if(!pool.length) pool=aliveGfs(); if(!pool.length) return;
+  if(Math.random()>0.14) return;
+  var g=pool[Math.floor(Math.random()*pool.length)];
+  var otherUid=(typeof window.__sidakVisit==="function")? window.__sidakVisit(g.uid):null;
+  g.lastContact=S.day; g.neglectDays=0;
+  if(otherUid){
+    var o=gfByUid(otherUid);
+    if(o && o.stage!=="kenalan"){
+      addSus(o,22,true); o.sus=Math.max(o.sus,94);
+      queueConfrontation(o, "🚪 SIDAK! "+g.name+" tiba-tiba datang mencarimu tanpa pemberitahuan — dan "+o.name+" sedang berada di dekat situ dan MELIHAT kalian berdua!");
+      log("🚪💥 Sidak "+g.name+" berujung konfrontasi dari "+o.name+"!");
+    }
+  } else {
+    addAff(g,4);
+    log("🚪 Sidak manis: "+g.name+" tiba-tiba muncul mencarimu — untung tidak ada pacar lain di dekatmu. Affection +4.");
+    toast("🚪 "+g.name+" tiba-tiba muncul mencarimu! Aman — affection +4.");
+  }
+  renderAll(); save(); pumpDialogs();
+}
+/* Peringatan kecurigaan: sekali per pacar per hari saat suspicion ≥ 60. */
+function checkSusWarnings(){
+  if(!S||S.over) return;
+  aliveGfs().forEach(function(g){
+    if(g.stage!=="kenalan" && g.sus>=60 && g._susWarnDay!==S.day){
+      g._susWarnDay=S.day;
+      toast("⚠️ "+g.name+" mulai curiga! Suspicion "+Math.round(g.sus)+" — tenangkan dia sebelum jadi konfrontasi!");
+    }
+  });
+}
+
 /* ---------------- ACTIONS ---------------- */
-function needSlot(){ if(S.over) return false; if(eatingNow){ toast("🍽️ Sedang makan… tunggu sampai selesai."); return false; } if(S.energy<5){ toast("Energi habis! Istirahat atau Tidur dulu."); return false; } return true; }
+function needSlot(){ if(S.over) return false; if(eatingNow){ toast("🍽️ Sedang makan… tunggu sampai selesai."); return false; } if(activityBusy){ toast("🎉 Sedang melakukan aktivitas… tunggu sampai selesai."); return false; } if(S.energy<5){ toast("Energi habis! Istirahat atau Tidur dulu."); return false; } return true; }
 function consumeSlot(){
   S.slot++;
   if(S.slot>=4){ endDay(); }
+  else maybeSidak();
   renderAll(); save();
 }
 function doWork(){
@@ -1226,15 +1549,19 @@ function doDate(uid, locId){
   movePlayerTo(loc);
   var danger=aliveGfs().filter(function(o){return o.uid!==uid && o.loc===locId;});
   var msg="Kencan dengan "+g.name+" di "+loc.name+": "+meterLabel(g).toLowerCase()+" +"+Math.round(gain)+".";
-  if(danger.length && Math.random()<0.55){
-    addSus(danger[0],20,true); addSus(g,10,true);
-    msg+=" Hampir ketahuan "+danger[0].name+" yang juga ada di sana!";
-    toast("😱 Nyaris ketahuan "+danger[0].name+"!");
-    checkGfState(danger[0]);
+  if(danger.length && Math.random()<0.6){
+    var wit=danger[0];
+    addSus(wit,26,true); addSus(g,10,true);
+    msg+=" DIPERGOKI "+wit.name+" yang juga ada di sana!";
+    if(wit.stage!=="kenalan" && !wit.inDialog){
+      wit.sus=Math.max(wit.sus,94);
+      queueConfrontation(wit, "👀 "+wit.name+" MEMERGOKIMU berduaan dengan "+g.name+" di "+loc.name+"! Dia melihatnya sendiri — ini bukan sekadar gosip.");
+    } else checkGfState(wit);
+    toast("🚨 DIPERGOKI "+wit.name+"!");
   } else toast("❤️ Kencan seru bareng "+g.name+"!");
   pushMsg(g,"her","Makasih ya hari ini, aku seneng banget jalan sama kamu 🥰");
   addMissionProgress("date",1);
-  log(msg); renderAll(); consumeSlot();
+  log(msg); renderAll(); consumeSlot(); pumpDialogs();
 }
 function buyGift(giftId, targetUid){
   var gift=GIFTS.filter(function(x){return x.id===giftId;})[0];
@@ -1386,19 +1713,46 @@ function doSleep(){ if(S.over)return; S.slot=3; endDay(); }
 /* ---------------- DAY CYCLE ---------------- */
 function endDay(){
   var finishedDay=S.day;
-  /* Evaluasi harian */
+  deferDialogs=true;
+  /* Evaluasi harian — pacar yang DIABAIKAN memburuk berjenjang:
+     affection jatuh makin besar tiap hari berturut-turut tanpa kontak,
+     suspicion ikut naik. Inilah yang membuat pacar "dingin" lalu minta putus. */
   eachGf(function(g){
     if(g.lastContact < S.day){
-      addAff(g,-4);
-      addSus(g, 5, true);
-      if(Math.random()<0.6) gfAsk(g);
-    } else if(Math.random()<0.45){ gfAsk(g); }
+      g.neglectDays=(g.neglectDays||0)+1;
+      var loss=Math.min(20, 5+g.neglectDays*3);
+      addAff(g,-loss);
+      addSus(g, 4+g.neglectDays*2, true);
+      log("🥶 "+g.name+" diabaikan "+g.neglectDays+" hari berturut-turut: affection -"+loss+(g.neglectDays>=2?", dia makin dingin & curiga":"")+".");
+      if(Math.random()<0.65) gfAsk(g);
+    } else { g.neglectDays=0; if(Math.random()<0.45){ gfAsk(g); } }
     if(g.pers==="Materialistis" && S.money<100000) addAff(g,-5);
     g.giftedToday=false;
     g.loc=LOCATIONS[1+Math.floor(Math.random()*(LOCATIONS.length-1))].id;
     checkGfState(g);
   });
-  if(S.over) return;
+  /* Dua pacar berakhir di lokasi yang sama → mereka sempat ngobrol dan
+     membandingkan cerita. Risiko gosip + kadang konfrontasi langsung. */
+  var gossipLines=[];
+  (function(){
+    var byLoc={};
+    partnerGfs().forEach(function(g){ (byLoc[g.loc]=byLoc[g.loc]||[]).push(g); });
+    Object.keys(byLoc).forEach(function(locId){
+      var grp=byLoc[locId]; if(grp.length<2) return;
+      if(Math.random()<0.4){
+        grp.forEach(function(g){ addSus(g,9,true); });
+        var names=grp.map(function(g){return g.name;}).join(" & ");
+        gossipLines.push("🗣️ "+names+" sama-sama berada di "+locById(locId).name+" dan sempat ngobrol — cerita mereka tentangmu mulai tidak cocok. Suspicion keduanya +9!");
+        log("🗣️ "+names+" bertemu & ngobrol di "+locById(locId).name+"! Suspicion +9.");
+        if(Math.random()<0.3){
+          var gv=grp[Math.floor(Math.random()*grp.length)];
+          gv.sus=Math.max(gv.sus,96);
+          queueConfrontation(gv, "🗣️ Ngobrol dengan "+grp.filter(function(x){return x!==gv;}).map(function(x){return x.name;}).join(", ")+" di "+locById(locId).name+" membuat "+gv.name+" sadar ada yang janggal dari ceritamu. Malam ini dia mengkonfrontasimu!");
+        }
+      }
+    });
+  })();
+  if(S.over){ deferDialogs=false; return; }
   /* ---- Evaluasi MISI HARIAN ---- */
   var missionReportHtml="", missionLines=[];
   if(S.missions && S.missions.length){
@@ -1434,7 +1788,7 @@ function endDay(){
   }
   /* Event acak — digabung ke laporan malam supaya tidak menimpa modal misi */
   var eventHtml="";
-  if(Math.random()<0.38){
+  if(Math.random()<0.52){
     var ev=EVENTS[Math.floor(Math.random()*EVENTS.length)];
     ev.apply();
     eventHtml="<h2 style='margin-top:14px'>"+ev.title+"</h2><p>"+ev.text+"</p>";
@@ -1449,12 +1803,21 @@ function endDay(){
   log("— Hari baru: Hari ke-"+S.day+" — Misi baru sudah terbit, cek tombol 🎯 Misi!");
   toast("🌅 Hari ke-"+S.day+" dari "+S.totalDays+" — misi baru terbit!");
   renderAll(); save();
-  if(missionReportHtml||eventHtml){
-    openModal((missionReportHtml||"<h2>🌙 Laporan Malam — Hari ke-"+finishedDay+"</h2>")+eventHtml+"<p style='margin-top:10px'><b style='color:var(--gold)'>🎯 Misi besok (Hari ke-"+S.day+"):</b> "+S.missions.map(function(m){return m.icon+" "+m.title;}).join(" • ")+"</p><button class='bigbtn' onclick='closeModal()'>Lanjut ke Hari "+S.day+"</button>");
-  }
+  /* Konfrontasi & dialog putus yang mengantre malam ini tampil DULU;
+     Laporan Malam dibuka setelah antrean dialog kosong. */
+  deferDialogs=false;
+  var gossipHtml=gossipLines.length? "<h2 style='margin-top:14px'>🗣️ Gosip di Kota</h2>"+gossipLines.map(function(l){return "<p>"+l+"</p>";}).join("") : "";
+  dialogAfter=function(){
+    if(S.over) return;
+    if(missionReportHtml||eventHtml||gossipHtml){
+      openModal((missionReportHtml||"<h2>🌙 Laporan Malam — Hari ke-"+finishedDay+"</h2>")+gossipHtml+eventHtml+"<p style='margin-top:10px'><b style='color:var(--gold)'>🎯 Misi besok (Hari ke-"+S.day+"):</b> "+S.missions.map(function(m){return m.icon+" "+m.title;}).join(" • ")+"</p><button class='bigbtn' onclick='closeModal()'>Lanjut ke Hari "+S.day+"</button>");
+    }
+  };
+  pumpDialogs();
 }
 function endGame(finished, reason){
   if(S.over) return; S.over=true;
+  deferDialogs=false; confrontationQueue=[]; breakupQueue=[]; dialogAfter=null;
   var n=partnerCount();
   var avg=n? partnerGfs().reduce(function(a,g){return a+g.aff;},0)/n : 0;
   var score=Math.round(n*avg);
@@ -1526,6 +1889,7 @@ function showStart(){
 function startGame(mode){
   defaultState(mode, selectedGender);
   clearSave();
+  deferDialogs=false; confrontationQueue=[]; breakupQueue=[]; dialogAfter=null;
   window.__hintDismissed=false;
   S.log=[]; log("Permainan dimulai! Mode "+mode+" hari sebagai "+(S.gender==="cewek"?"cewek":"cowok")+". Kamu punya 5 pacar. Jangan ketahuan!");
   mainPartners().forEach(function(d,i){ var g=S.gfs[i]; pushMsg(g,"her","Hai sayang! Akhirnya bisa chat lagi 🥰"); g.unread=1; });
@@ -1583,7 +1947,7 @@ function showHowTo(){
   var pw=partnerWord(), PW=pw.charAt(0).toUpperCase()+pw.slice(1);
   openModal("<h2>❓ Cara Main Singkat</h2><div style='color:var(--muted);line-height:1.6;font-size:.92rem'>"+
     "<p>• Tiap hari ada 4 slot: <b style='color:var(--ink)'>Pagi, Siang, Sore, Malam</b>. Kencan, kerja, istirahat, dan PDKT memakai 1 slot.</p>"+
-    "<p>• <b style='color:var(--ink)'>Affection habis</b> = dia pergi. <b style='color:var(--ink)'>Suspicion 100</b> = KETAHUAN dan dia menyebar cerita. Dua ketahuan dalam seminggu yang sama = game over.</p>"+
+    "<p>• <b style='color:var(--ink)'>Affection habis</b> = dia minta putus (masih bisa dibujuk). <b style='color:var(--ink)'>Suspicion 100</b> = KONFRONTASI — jawab dengan benar atau putus &amp; terhitung KETAHUAN. Dua ketahuan dalam seminggu yang sama = game over.</p>"+
     "<p>• Jelajahi kota 3D: gerak pakai <b style='color:var(--ink)'>joystick virtual</b> di kiri bawah atau WASD/panah keyboard; seret layar untuk memutar kamera. Perhatikan radar: titik pink = pacar yang sedang di lokasi itu. Jangan kencan di lokasi yang ada pacar lain!</p>"+
     "<p>• <b style='color:var(--ink)'>Ketuk gedung lokasi</b> (kafe, mal, taman, bioskop, dll.) untuk membuka panelnya — dari sana kamu bisa langsung mengajak pacar kencan ke lokasi itu.</p>"+
     "<p>• <b style='color:var(--ink)'>Kota sekarang jauh lebih luas</b> — ada distrik timur (🍜 Warung Makan Bu Tini &amp; 🎡 Pasar Malam) dan distrik selatan (🏘️ Kampung Melati &amp; 🛶 Danau Biru), terhubung jalan-jalan baru dengan lebih banyak gedung, lampu jalan, dan orang yang lalu-lalang.</p>"+
@@ -1591,6 +1955,10 @@ function showHowTo(){
     "<p>• <b style='color:var(--ink)'>Nambah pacar (bertahap!):</b> "+pw+" yang lewat di jalan/mal bertanda 💬 di atas kepalanya. Dekati dia sampai tombol <b style='color:var(--ink)'>💬 Ajak Kenalan</b> muncul (atau ketuk langsung orangnya), lalu pilih kalimat pembuka PDKT yang tepat. PDKT berhasil baru membuatnya jadi <b style='color:var(--ink)'>🤝 Kenalan</b> — belum terhitung pacar &amp; rank. Naikkan <b style='color:var(--ink)'>meter kedekatannya</b> lewat balasan chat yang baik, ajak kencan, dan beri hadiah; setelah mencapai <b style='color:var(--ink)'>70%</b>, tekan <b style='color:var(--ink)'>💘 Tembak / Jadian</b> di tab Pacar. Ditembak terlalu dini = ditolak dan kedekatan turun 6! Jumlah pacar tetap tanpa batas. Tombol 💘 Kenalan di bilah aksi juga bisa dipakai kapan pun.</p>"+
     "<p>• Rank naik mengikuti jumlah pacar: Pemula → "+(S&&S.gender==="cewek"?"Playgirl":"Playboy")+" Amatir → Master Hati → "+(S&&S.gender==="cewek"?"Ratu":"Raja")+" Harem → Legenda Tanpa Jejak (12+).</p>"+
     "<p>• <b style='color:var(--ink)'>Misi Harian:</b> tiap hari ada 3 misi acak (tombol 🎯 Misi di HUD, progresnya seperti 1/3). Contoh: kencan 2x, hasilkan Rp150.000 dari kerja, 3 chat menyenangkan, kenalan 1 orang baru, traktir makan di warung, atau jangan ketahuan seharian. Misi selesai = hadiah langsung uang + affection. Semua misi selesai = bonus malam Rp100.000 + streak 🔥 naik. Misi gagal saat tidur/hari berakhir = suspicion pacar acak +8 per misi, streak putus, tanpa bonus — semua tertulis di Laporan Malam.</p>"+
+    "<p>• <b style='color:var(--ink)'>KONFRONTASI itu nyata sekarang:</b> suspicion mencapai 100, dipergoki pacar lain saat kencan/aktivitas berdua, kena SIDAK (pacar datang tiba-tiba saat pacar lain di dekatmu), atau dua pacarmu ngobrol di lokasi yang sama dan membandingkan cerita — semuanya memicu adegan konfrontasi. Kamu memilih jawaban: 🤥 Bohong (peluang besar, tapi gagal bisa langsung terbongkar), 🙄 Ngeles (lebih aman, jarang langsung putus), 🙏 Minta Maaf (affection tetap jatuh), atau 😶 Jujur (hanya berhasil kalau dia sangat sayang kamu). Peluang tiap jawaban tertulis di tombolnya dan dipengaruhi affection &amp; suspicion dia. Gagal total = putus &amp; terhitung KETAHUAN. Perhatikan peringatan ⚠️ saat suspicion pacar melewati 60, meter 👁 di tab Pacar, dan radar — titik merah = pacar dekat!</p>"+
+    "<p>• <b style='color:var(--ink)'>Diabaikan = ditinggal:</b> pacar yang seharian tidak kamu chat/kencani/hadiahi kehilangan affection makin besar tiap hari berturut-turut (−8, −11, −14, …) dan suspicion-nya naik. Di tab Pacar dia bertanda 🥶 Dingin. Kalau affection habis, dia MINTA PUTUS lewat dialog: bujuk dengan hadiah terbaik, kencan mewah darurat, atau minta maaf (peluang mengikuti sisa affection) — atau terima putusnya dan kehilangan satu pacar (rank &amp; skor ikut turun).</p>"+
+    "<p>• <b style='color:var(--ink)'>Aktivitas distrik:</b> tiap distrik terlihat seperti namanya (Pantai berlaut &amp; bergubuk kelapa, Pasar Malam berlampion &amp; bianglala berputar, Stasiun berel &amp; kereta, Kampus bergerbang, Danau berdermaga) dan punya aktivitas yang terlihat di layar lewat tombol emas saat kamu di sana: 🥥 minum kelapa di Pantai, 🎡 jajan &amp; main di Pasar Malam, 🧺 piknik di Taman, 🎣 memancing &amp; naik perahu di Danau, 🚆 naik kereta di Stasiun, ☕ ngopi di Kafe, 🛍️ window shopping di Mal, 📸 foto di Alun-Alun, 📚 nongkrong kantin di Kampus. Sendiri memulihkan energi; bareng pacar menaikkan affection — tapi pacar lain di lokasi yang sama bisa memergoki!</p>"+
+    "<p>• <b style='color:var(--ink)'>Makin banyak pacar, makin berat:</b> suspicion semua pacar naik lebih cepat untuk tiap pacar di atas 3 orang, risiko salah kirim chat ikut naik, event acak (video call dadakan, gosip, teman pacar memergoki, sidak) makin sering. Lawan dengan jadwal rapi, HP Kedua, dan Teman Alibi.</p>"+
     "<p>• Beli upgrade penyelamat: HP Kedua, Mobil, dan Teman Alibi di Toko.</p></div>"+
     "<button class='bigbtn' onclick='closeModal()'>Siap, Gas!</button>");
 }
@@ -1601,7 +1969,7 @@ function showGhGuide(){
     "<li>Upload file itu, lalu <b>rename menjadi index.html</b> di repo.</li>"+
     "<li>Buka <b>Settings → Pages</b>, pilih branch <b>main</b> / root, simpan.</li>"+
     "<li>Tunggu ±1 menit — game live di <b>https://username.github.io/jangan-ketahuan/</b></li>"+
-    "<li><b>Bonus PWA (bisa di-install seperti aplikasi):</b> upload juga file <b>manifest.webmanifest</b>, <b>sw.js</b>, dan folder <b>icons/</b> (berisi icon.svg) ke repo yang sama, sejajar dengan index.html — file-file ini memang harus terpisah, tidak bisa ditanam di dalam HTML. Setelah itu pemain bisa memilih <b>“Tambahkan ke Layar Utama / Install app”</b> di browser HP dan game berjalan fullscreen landscape seperti aplikasi.</li></ol>"+
+    "<li><b>Bonus PWA (bisa di-install seperti aplikasi):</b> upload juga file <b>manifest.webmanifest</b>, <b>sw.js</b>, dan folder <b>icons/</b> (berisi icon-192.png &amp; icon-512.png) ke repo yang sama, sejajar dengan index.html — file-file ini memang harus terpisah, tidak bisa ditanam di dalam HTML. Setelah itu pemain bisa memilih <b>“Tambahkan ke Layar Utama / Install app”</b> di browser HP dan game berjalan fullscreen landscape seperti aplikasi.</li></ol>"+
     "<p>Catatan: GitHub Pages hanya melayani file statis, jadi save game tersimpan di browser/HP masing-masing pemain (localStorage), bukan di server. Butuh koneksi internet untuk library 3D (Three.js) &amp; font dari CDN saat pertama kali dibuka; setelah itu file inti game tersimpan di cache PWA.</p>"+
     "<button class='bigbtn' onclick='closeModal();exportSingleFile()'>⬇ Export Sekarang</button>"+
     "<button class='bigbtn alt' onclick='closeModal()'>Tutup</button>");
@@ -1841,6 +2209,74 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       var sp=textSprite(s[2],{bg:"rgba(20,16,42,0.9)", fg:"#ffc94d"}); sp.position.set(s[0],3.4,s[1]); sp.scale.set(7,2.2,1); scene.add(sp);
     });
   })();
+  /* ---------- Identitas distrik diperkuat + titik aktivitas ----------
+     Pantai: laut + ombak + gubuk kelapa + kursi pantai. Pasar Malam:
+     lampion gantung + bianglala berputar. Taman: bunga + tikar piknik.
+     Danau: kursi pancing + perahu kedua. Stasiun: rel + lampu peron.
+     Kampus: gerbang + gedung kuliah. Mal: deretan toko. Kafe: meja luar. */
+  var ferrisWheel=null;
+  (function(){
+    function bx(w,h,d,color,x,y,z,parent){ var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshLambertMaterial({color:color})); m.position.set(x,y,z); m.castShadow=true; (parent||scene).add(m); return m; }
+    function cy(rt,rb,h,color,x,y,z,parent){ var m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,12), new THREE.MeshLambertMaterial({color:color})); m.position.set(x,y,z); m.castShadow=true; (parent||scene).add(m); return m; }
+    /* PANTAI — laut luas di selatan pasir, garis busa ombak, gubuk kelapa muda */
+    var pl2=locById("pantai");
+    var sea=new THREE.Mesh(new THREE.PlaneGeometry(54,24), new THREE.MeshLambertMaterial({color:0x1d6fb8}));
+    sea.rotation.x=-Math.PI/2; sea.position.set(pl2.x+2,0.02,pl2.z+21); scene.add(sea);
+    for(var wv=0; wv<3; wv++){ var foam=new THREE.Mesh(new THREE.PlaneGeometry(40-wv*6,0.5), new THREE.MeshBasicMaterial({color:0xeaf7ff})); foam.rotation.x=-Math.PI/2; foam.position.set(pl2.x+2,0.035,pl2.z+10+wv*2.4); scene.add(foam); }
+    bx(2.6,1.6,1.8,0x8a5a2b, pl2.x-4.5,0.8,pl2.z+3.5);
+    var hutRoof=new THREE.Mesh(new THREE.ConeGeometry(2.2,0.9,4), new THREE.MeshLambertMaterial({color:0xd9a441})); hutRoof.position.set(pl2.x-4.5,2.05,pl2.z+3.5); hutRoof.rotation.y=Math.PI/4; hutRoof.castShadow=true; scene.add(hutRoof);
+    var kelapaSign=textSprite("🥥 KELAPA MUDA",{bg:"rgba(20,90,40,0.92)"}); kelapaSign.position.set(pl2.x-4.5,3.1,pl2.z+3.5); kelapaSign.scale.set(5.4,1.7,1); scene.add(kelapaSign);
+    decorColliders.push({x:pl2.x-4.5,z:pl2.z+3.5,w:2.6,d:1.8});
+    /* Kursi pantai + meja kelapa tepat di titik aktivitas "Minum Kelapa" (loc +3,+5) */
+    [-0.95,0.95].forEach(function(off){ var ch=bx(0.7,0.5,1.5,0xf4f1ff, pl2.x+3+off,0.25,pl2.z+5); ch.rotation.x=-0.25; });
+    cy(0.3,0.3,0.45,0x2f9e5f, pl2.x+3,0.22,pl2.z+4.0);
+    /* Palem ekstra dengan daun menjuntai */
+    [[-7,7],[8,2],[6,9]].forEach(function(o){
+      cy(0.09,0.13,2.6,0x8a5a2b, pl2.x+o[0],1.3,pl2.z+o[1]);
+      for(var lf=0;lf<5;lf++){ var la=lf/5*Math.PI*2; var leaf=new THREE.Mesh(new THREE.ConeGeometry(0.28,1.7,5), new THREE.MeshLambertMaterial({color:0x2f9e5f})); leaf.position.set(pl2.x+o[0]+Math.cos(la)*0.7,2.75,pl2.z+o[1]+Math.sin(la)*0.7); leaf.rotation.z=Math.cos(la)*1.1; leaf.rotation.x=-Math.sin(la)*1.1; scene.add(leaf); }
+    });
+    /* PASAR MALAM — tiang + untaian lampion warna-warni + bianglala berputar */
+    var pm=locById("pasar");
+    [[-8,-6],[8,-6],[-8,8],[8,8]].forEach(function(o){ cy(0.06,0.06,4.4,0x55506e, pm.x+o[0],2.2,pm.z+o[1]); });
+    [[-8,-6,8,-6],[-8,8,8,8],[-8,-6,-8,8],[8,-6,8,8]].forEach(function(ln){
+      for(var s2=1;s2<8;s2++){ var t2=s2/8; var bulb=new THREE.Mesh(new THREE.SphereGeometry(0.16,8,8), new THREE.MeshLambertMaterial({color:[0xef4444,0xf59e0b,0x10b981,0xec4899][s2%4], emissive:0x662200})); bulb.position.set(pm.x+ln[0]+(ln[2]-ln[0])*t2, 4.3-Math.sin(t2*Math.PI)*0.5, pm.z+ln[1]+(ln[3]-ln[1])*t2); scene.add(bulb); }
+    });
+    var fwGroup=new THREE.Group();
+    var wheel=new THREE.Mesh(new THREE.TorusGeometry(4.6,0.16,8,28), new THREE.MeshLambertMaterial({color:0xfacc15, emissive:0x665500}));
+    fwGroup.add(wheel);
+    for(var sp2=0; sp2<4; sp2++){ var spoke=bx(0.14,9.0,0.14,0xfacc15,0,0,0,fwGroup); spoke.rotation.z=sp2*Math.PI/4; }
+    for(var cb=0; cb<8; cb++){ var ca=cb/8*Math.PI*2; bx(0.8,0.7,0.5,[0xef4444,0x3b82f6,0x10b981,0xec4899][cb%4], Math.cos(ca)*4.6, Math.sin(ca)*4.6, 0, fwGroup); }
+    fwGroup.position.set(pm.x-13,5.4,pm.z-7); scene.add(fwGroup); ferrisWheel=fwGroup;
+    cy(0.18,0.3,5.4,0x6b7280, pm.x-13,2.7,pm.z-7);
+    decorColliders.push({x:pm.x-13,z:pm.z-7,w:1.6,d:1.6});
+    /* TAMAN — bunga warna-warni menyebar + tikar piknik di titik aktivitas */
+    var tm=locById("taman");
+    for(var fl2=0; fl2<26; fl2++){ var fx=tm.x+(Math.random()*26-13), fz=tm.z+(Math.random()*18-9); if(Math.hypot(fx-tm.x,fz-(tm.z+6))<3.4) continue; var flw=new THREE.Mesh(new THREE.SphereGeometry(0.14,6,6), new THREE.MeshLambertMaterial({color:[0xef4444,0xfacc15,0xec4899,0xf4f1ff][fl2%4]})); flw.position.set(fx,0.22,fz); scene.add(flw); }
+    var blanket=new THREE.Mesh(new THREE.PlaneGeometry(2.4,1.8), new THREE.MeshLambertMaterial({color:0xdc2626})); blanket.rotation.x=-Math.PI/2; blanket.position.set(tm.x+4.5,0.045,tm.z+3); scene.add(blanket);
+    /* DANAU — kursi pancing di dermaga, perahu kedua, ilalang di tepi air */
+    var dn=locById("danau");
+    bx(0.55,0.5,0.55,0x8a5a2b, dn.x+2,0.5,dn.z+10);
+    bx(1.8,0.6,2.6,0x38bdf8, dn.x-3,0.45,dn.z+13);
+    for(var rd=0; rd<7; rd++){ cy(0.03,0.03,1.3,0x2f9e5f, dn.x-6+rd*1.8,0.65,dn.z+5.5); }
+    /* STASIUN — dua rel baja + bantalan kayu + lampu peron */
+    var st2=locById("stasiun");
+    [-0.7,0.7].forEach(function(off){ bx(17,0.08,0.12,0x9aa5b1, st2.x,0.16,st2.z+10.5+off); });
+    for(var sl3=0; sl3<9; sl3++){ bx(0.5,0.06,2.0,0x4a3728, st2.x-8+sl3*2,0.1,st2.z+10.5); }
+    [-6,0,6].forEach(function(off){ cy(0.05,0.05,3.0,0x55506e, st2.x+off,1.9,st2.z+6.2); var pl3=new THREE.Mesh(new THREE.SphereGeometry(0.17,8,8), new THREE.MeshBasicMaterial({color:0xffd97a})); pl3.position.set(st2.x+off,3.45,st2.z+6.2); scene.add(pl3); });
+    /* KAMPUS — gerbang dua pilar + gedung kuliah besar di belakang */
+    var kp=locById("kampus");
+    [-2.6,2.6].forEach(function(off){ bx(0.6,3.4,0.6,0x90e0a8, kp.x+off,1.7,kp.z+7); });
+    bx(6.4,0.7,0.8,0x90e0a8, kp.x,3.6,kp.z+7);
+    var gateSign=textSprite("🎓 GERBANG KAMPUS",{bg:"rgba(20,80,40,0.92)"}); gateSign.position.set(kp.x,4.6,kp.z+7); gateSign.scale.set(6.4,2.0,1); scene.add(gateSign);
+    bx(9,5.5,5,0x7fb069, kp.x,2.75,kp.z-8);
+    decorColliders.push({x:kp.x,z:kp.z-8,w:9,d:5});
+    /* MAL — deretan toko warna-warni beratap di depan gedung mal */
+    var ml=locById("mal");
+    [-4.4,0,4.4].forEach(function(off,i){ bx(3.6,2.4,2.2,[0xff8fab,0x5dd6ff,0xfacc15][i], ml.x+off,1.2,ml.z+6); var aw=bx(3.8,0.1,1.0,[0xef4444,0x3b82f6,0x10b981][i], ml.x+off,2.2,ml.z+7.3); aw.rotation.x=0.3; decorColliders.push({x:ml.x+off,z:ml.z+6,w:3.6,d:2.2}); });
+    /* KAFE — meja luar bundar + payung kecil */
+    var kf=locById("kafe");
+    [[-2.5,4],[2.5,4.5]].forEach(function(o){ cy(0.35,0.35,0.5,0xf4f1ff, kf.x+o[0],0.55,kf.z+o[1]); cy(0.04,0.04,1.7,0x8a5a2b, kf.x+o[0],0.85,kf.z+o[1]); var um2=new THREE.Mesh(new THREE.ConeGeometry(1.1,0.4,8), new THREE.MeshLambertMaterial({color:0xffb703})); um2.position.set(kf.x+o[0],1.8,kf.z+o[1]); scene.add(um2); });
+  })();
   /* ---------- lampu jalan di semua jalan utama kota yang diperluas ---------- */
   var lampMat=new THREE.MeshLambertMaterial({color:0xffd97a, emissive:0xffb84d});
   var lampPostMat=new THREE.MeshLambertMaterial({color:0x55506e});
@@ -1924,7 +2360,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     crown.position.set(tx,3,tz); crown.castShadow=true; scene.add(crown);
   }
   /* pantai: sand + water */
-  var sand=new THREE.Mesh(new THREE.CircleGeometry(9,24), new THREE.MeshLambertMaterial({color:0xe8d28a}));
+  var sand=new THREE.Mesh(new THREE.CircleGeometry(11.5,28), new THREE.MeshLambertMaterial({color:0xe8d28a}));
   sand.rotation.x=-Math.PI/2; var pantaiLoc=locById("pantai"); sand.position.set(pantaiLoc.x,0.03,pantaiLoc.z); scene.add(sand);
 
   /* ---------- character factory (manusia baru) ---------- */
@@ -2206,6 +2642,10 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     var pp=peds[nearestPedKey].mesh.position;
     if(window.startNpcPdkt) startNpcPdkt(nearestPedKey, nearestLocationId(pp.x,pp.z));
   });
+  var locActBtn=document.getElementById("locactbtn");
+  if(locActBtn) locActBtn.addEventListener("click",function(){
+    if(locActBtn.dataset.loc && window.openActivity) openActivity(locActBtn.dataset.loc);
+  });
   interactBtn.addEventListener("click",function(){
     if(!nearestNpc || !window.S || S.over) return;
     var g=nearestNpc.gf;
@@ -2324,6 +2764,76 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     if(window.__onEatDone) window.__onEatDone();
   }
 
+  /* ---------- animasi aktivitas distrik ----------
+     Pemain (dan pacar bila bareng) duduk/berdiri di titik aktivitas
+     ±4,2 detik dengan kamera sinematik, lalu efek diterapkan logika game.
+     Pose "sit": duduk menekuk kaki + tangan bergerak (minum kelapa /
+     memancing / ngopi). Pose "stand": berdiri santai melambai kecil. */
+  var actAnim=null, pendingActReq=null;
+  var ACT_DURATION=4.2;
+  window.__startActivityAnim=function(req){ pendingActReq=req; };
+  function poseActivity(mesh, pose, phase){
+    var p=mesh.userData.parts; if(!p) return;
+    if(pose==="sit"){
+      mesh.position.y=-0.42;
+      p.legL.rotation.x=-1.5; p.legR.rotation.x=-1.5;
+      var wave=Math.sin(phase*Math.PI*2);
+      p.armR.rotation.x=-1.3+wave*0.5;
+      p.armL.rotation.x=-0.4;
+      p.headG.rotation.x=0.1+wave*0.06;
+    } else {
+      mesh.position.y=0;
+      p.legL.rotation.x=0; p.legR.rotation.x=0;
+      var sway=Math.sin(phase*Math.PI*2);
+      p.armR.rotation.x=-0.4+sway*0.35;
+      p.armL.rotation.x=-0.4-sway*0.35;
+      p.headG.rotation.y=Math.sin(phase*2.2)*0.25;
+    }
+  }
+  function startActAnim(req, tNow){
+    P.x=req.x; P.z=req.z; P.heading=Math.PI;
+    var partnerMesh=null, hiddenNpc=null;
+    if(req.partner){
+      var female=partnersFemale();
+      var st=(female? HAIR_STYLES:HAIR_STYLES_M)[(req.partner.portrait||0)%8];
+      partnerMesh=makePerson({shirt:req.partner.color, pants:female? 0xf2e8f5:0x2e3a55, hair:st.hair, longHair:st.longHair, bun:st.bun, dress:female, skin:[0xf2c49b,0xe8b98a,0xc98d5f][(req.partner.portrait||0)%3]});
+      var alabel=textSprite(req.partner.name,{bg:"rgba(255,93,143,0.92)"});
+      alabel.position.y=2.65; partnerMesh.add(alabel);
+      partnerMesh.position.set(req.x+1.15, req.pose==="sit"? -0.42:0, req.z);
+      partnerMesh.rotation.y=Math.PI;
+      scene.add(partnerMesh);
+      npcs.forEach(function(n){ if(n.gf.uid===req.partner.uid){ n.mesh.visible=false; hiddenNpc=n; } });
+    }
+    actAnim={startT:tNow, partnerMesh:partnerMesh, hiddenNpc:hiddenNpc, pose:req.pose||"sit"};
+  }
+  function endActAnim(){
+    if(!actAnim) return;
+    if(actAnim.partnerMesh) scene.remove(actAnim.partnerMesh);
+    if(actAnim.hiddenNpc) actAnim.hiddenNpc.mesh.visible=true;
+    if(playerMesh){ var pp=playerMesh.userData.parts; if(pp){ pp.headG.rotation.x=0; pp.headG.rotation.y=0; pp.legL.rotation.x=0; pp.legR.rotation.x=0; pp.armR.rotation.x=0; pp.armL.rotation.x=0; } playerMesh.position.y=0; }
+    actAnim=null;
+    if(window.__onActivityDone) window.__onActivityDone();
+  }
+  /* ---------- SIDAK: pacar muncul tiba-tiba di samping pemain ----------
+     Dipanggil logika game: NPC pacar itu dipindah ke dekat pemain, lalu
+     dicek apakah ada pacar LAIN (bukan kenalan) dalam radius 13 — kalau
+     ada, uid-nya dikembalikan sebagai pemicu konfrontasi. */
+  window.__sidakVisit=function(uid){
+    var n=null;
+    npcs.forEach(function(x){ if(x.gf.uid===uid) n=x; });
+    if(!n) return null;
+    n.mesh.position.set(P.x+2.6,0,P.z+2.6);
+    n.tx=n.mesh.position.x; n.tz=n.mesh.position.z; n.idle=7;
+    var other=null;
+    npcs.forEach(function(x){
+      if(x!==n && !x.gf.gone && x.gf.stage!=="kenalan"){
+        var d=Math.hypot(x.mesh.position.x-P.x, x.mesh.position.z-P.z);
+        if(d<13) other=x;
+      }
+    });
+    return other? other.gf.uid : null;
+  };
+
   /* Semua penabrak: gedung lokasi + dekor distrik + gedung latar. */
   var allColliders=locColliders.concat(decorColliders,bgColliders);
 
@@ -2350,6 +2860,8 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     var dt=Math.min(clock.getDelta(),0.05), t=clock.elapsedTime;
     /* Permintaan animasi makan baru dari panel warung? */
     if(pendingEatReq && !eatAnim){ var req0=pendingEatReq; pendingEatReq=null; startEatAnim(req0, t); }
+    /* Permintaan animasi aktivitas distrik baru? */
+    if(pendingActReq && !actAnim && !eatAnim){ var reqA=pendingActReq; pendingActReq=null; startActAnim(reqA, t); }
     /* Animasi makan berjalan: pemain duduk di warung, pose menyuap,
        piring perlahan kosong, uap mengepul. Input gerak diabaikan. */
     if(eatAnim){
@@ -2370,8 +2882,20 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
         });
       }
     }
-    /* movement input (diabaikan selama animasi makan) */
-    if(!eatAnim){
+    /* Animasi aktivitas distrik berjalan: pemain duduk/berdiri di titik
+       aktivitas bersama pacar (bila bareng). Input gerak diabaikan. */
+    if(actAnim){
+      var aElapsed=t-actAnim.startT;
+      if(aElapsed>=ACT_DURATION){ endActAnim(); }
+      else {
+        playerHolder.position.x=P.x; playerHolder.position.z=P.z;
+        playerHolder.rotation.y=Math.PI;
+        if(playerMesh) poseActivity(playerMesh, actAnim.pose, aElapsed/1.15);
+        if(actAnim.partnerMesh) poseActivity(actAnim.partnerMesh, actAnim.pose, aElapsed/1.15+0.45);
+      }
+    }
+    /* movement input (diabaikan selama animasi makan / aktivitas) */
+    if(!eatAnim && !actAnim){
     var ix=0, iz=0;
     if(keys["w"]||keys["arrowup"]) iz-=1;
     if(keys["s"]||keys["arrowdown"]) iz+=1;
@@ -2407,7 +2931,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     /* NPC wander */
     npcs.forEach(function(n){
       if(n.gf.gone){ n.mesh.visible=false; return; }
-      n.mesh.visible=!(eatAnim && eatAnim.hiddenNpc===n);
+      n.mesh.visible=!(eatAnim && eatAnim.hiddenNpc===n) && !(actAnim && actAnim.hiddenNpc===n);
       /* Label mengikuti tahap hubungan (kenalan ↔ pacar setelah jadian). */
       if(n.gf.stage && n.labelStage!==n.gf.stage){
         n.labelStage=n.gf.stage;
@@ -2430,6 +2954,8 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       }
       animateWalk(n.mesh, nSpeed, t);
     });
+    /* bianglala pasar malam berputar pelan */
+    if(ferrisWheel) ferrisWheel.rotation.z+=dt*0.25;
     /* pejalan kaki: jalan-jalan keliling kota */
     peds.forEach(function(ped, i){
       var dx=ped.tx-ped.mesh.position.x, dz=ped.tz-ped.mesh.position.z, dist=Math.hypot(dx,dz);
@@ -2456,7 +2982,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       var d=Math.hypot(ped.mesh.position.x-P.x, ped.mesh.position.z-P.z);
       if(d<pd){ pd=d; nearestPed=ped; nearestPedKey=i; }
     });
-    var inGame = window.S && !S.over && !eatAnim;
+    var inGame = window.S && !S.over && !eatAnim && !actAnim;
     if(nearestPed && inGame){ meetBtn.style.display="block"; interactBtn.style.display="none"; }
     else {
       meetBtn.style.display="none";
@@ -2478,6 +3004,10 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       playerHolder.visible=true;
       camera.position.lerp(new THREE.Vector3(dining.x+3.4, 2.1, dining.z+3.9), 0.12);
       camera.lookAt(dining.x,1.0,dining.z);
+    } else if(actAnim){
+      playerHolder.visible=true;
+      camera.position.lerp(new THREE.Vector3(P.x+3.4, 2.1, P.z+4.1), 0.12);
+      camera.lookAt(P.x,1.0,P.z);
     } else if(P.fpp){
       camera.position.set(P.x,1.72,P.z);
       var fx=Math.sin(P.heading), fz=Math.cos(P.heading);
@@ -2491,6 +3021,17 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     /* label lokasi */
     var cl=currentLocName();
     locLabel.textContent=cl? cl.icon+" "+cl.name : "🏙️ Kota";
+    /* Tombol aktivitas distrik: muncul hanya saat pemain berdiri di lokasi
+       yang punya aktivitas dan tidak ada panel terbuka. */
+    var actBtn=document.getElementById("locactbtn");
+    if(actBtn){
+      var actHere=(cl && typeof activityForLoc==="function")? activityForLoc(cl.id):null;
+      if(actHere && inGame && !window.__locPanelOpen){
+        actBtn.style.display="block";
+        actBtn.textContent=actHere.icon+" "+actHere.name;
+        actBtn.dataset.loc=cl.id;
+      } else actBtn.style.display="none";
+    }
     drawRadar();
     renderer.render(scene,camera);
   }

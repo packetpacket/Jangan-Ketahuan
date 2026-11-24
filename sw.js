@@ -1,5 +1,5 @@
 /* Service worker PWA "Jangan Ketahuan!" — cache-first, versioned. */
-const CACHE = "jangan-ketahuan-v2";
+const CACHE = "jangan-ketahuan-v3";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icons/icon.svg"];
 
 self.addEventListener("install", (event) => {
