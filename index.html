@@ -200,26 +200,118 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
 #eatbanner{position:absolute; top:52px; left:50%; transform:translateX(-50%); z-index:26; display:none; background:rgba(23,17,48,.94); border:1.5px solid var(--gold); color:var(--ink); border-radius:999px; padding:7px 16px; font-weight:900; font-size:.85rem; white-space:nowrap;}
 #eatbanner.open{display:block;}
 
-/* ---------- Landscape ---------- */
-@media (orientation:landscape) and (max-height:560px){
-  #hud{padding:5px 10px; gap:6px 10px; font-size:.9rem;}
-  #app{padding-bottom:76px;}
-  #citylayout{flex-direction:row; align-items:flex-start;}
-  #stagewrap{flex:1.6; aspect-ratio:auto; height:calc(100vh - 150px); min-height:240px;}
-  #cityside{flex:1; display:flex; flex-direction:column; gap:10px; min-width:230px;}
-  #actions{grid-template-columns:repeat(2,1fr);}
-  #threadbox{height:38vh;}
-  #tabbar button{min-height:44px;}
-}
+/* ---------- Landscape HP: blok lengkap ada di akhir <style> ---------- */
 @media (min-width:900px){
   #citylayout{flex-direction:row; align-items:flex-start;}
   #stagewrap{flex:1.7;}
   #cityside{flex:1; display:flex; flex-direction:column; gap:10px; min-width:260px;}
 }
 #cityside{display:flex; flex-direction:column; gap:10px;}
+
+/* ---------- Landscape HP: peta fullscreen, UI ramping ----------
+   Sengaja ditaruh paling akhir supaya menang atas blok min-width:900px
+   (HP landscape lebarnya bisa ≥900px). Game ini LANDSCAPE-ONLY:
+   saat portrait, layar "Putar HP" (#rotategate) menutupi seluruh game. */
+#acttoggle{display:none;}
+#fsbtn{background:var(--card2); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:6px 12px; font-weight:900;}
+/* ---------- Gerbang putar HP (hanya tampil saat portrait) ---------- */
+#rotategate{display:none;}
+@media (orientation:portrait){
+  body{overflow:hidden;}
+  #rotategate{display:flex; position:fixed; inset:0; z-index:200; background:var(--bg);
+    align-items:center; justify-content:center; text-align:center; padding:24px;}
+}
+#rotategate .gateinner{max-width:420px; display:flex; flex-direction:column; align-items:center; gap:12px;}
+#rotategate h2{font-size:1.7rem; font-weight:900;}
+#rotategate h2 span{color:var(--pink);}
+#rotategate p{color:var(--muted); line-height:1.55; margin:0; font-size:.95rem;}
+#rotategate .gatehint{font-size:.82rem; font-weight:700;}
+#rotategate .bigbtn{margin-top:4px;}
+#gatephone{animation:gatesway 2.4s ease-in-out infinite alternate; transform-origin:60px 60px;}
+@keyframes gatesway{0%,25%{transform:rotate(0deg);}75%,100%{transform:rotate(90deg);}}
+@media (prefers-reduced-motion:reduce){ #gatephone{animation:none; transform:rotate(90deg);} }
+@media (orientation:landscape) and (max-height:560px){
+  /* HUD: satu baris tipis, tidak membungkus */
+  #hud{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; padding:4px 8px; gap:4px 10px; font-size:.8rem;}
+  #hud::-webkit-scrollbar{display:none;}
+  #hud>span{white-space:nowrap;}
+  #hud .daypill{padding:2px 10px; font-size:.78rem;}
+  #hud .rankpill{padding:2px 10px; font-size:.78rem;}
+  #hud .energywrap{font-size:.8rem;}
+  #hud .energybar{width:56px; height:10px;}
+  #hud .money{font-size:.92rem;}
+  #menubtn{padding:3px 10px; min-height:30px; font-size:.82rem;}
+  #fsbtn{padding:3px 10px; min-height:30px; font-size:.82rem;}
+
+  /* Panggung kota memenuhi hampir seluruh layar */
+  #app{padding:6px 6px 46px; max-width:none;}
+  #citylayout{flex-direction:column;}
+  #stagewrap{flex:none; width:100%; aspect-ratio:auto; height:calc(100vh - 96px); height:calc(100dvh - 96px); min-height:210px;}
+
+  /* Panel aksi + log: laci geser dari kanan, default tertutup */
+  #cityside{position:fixed; top:42px; right:0; bottom:46px; width:min(300px,74vw); min-width:0; z-index:45;
+    background:rgba(23,17,48,.97); border-left:2px solid var(--line); padding:10px;
+    overflow-y:auto; transform:translateX(105%); transition:transform .25s ease; box-shadow:-10px 0 28px rgba(0,0,0,.45);}
+  #cityside.open{transform:translateX(0);}
+  #actions{grid-template-columns:repeat(2,1fr);}
+  #acttoggle{display:block; position:absolute; right:10px; bottom:10px; z-index:32;
+    background:rgba(255,93,143,.92); color:#fff; border:2px solid rgba(255,255,255,.55);
+    border-radius:999px; padding:8px 16px; font-weight:900; font-size:.85rem; box-shadow:0 6px 16px rgba(0,0,0,.45);}
+
+  /* Joystick kecil di sudut kiri bawah */
+  #joy{width:82px; height:82px; left:10px; bottom:10px;}
+  #joystick{width:38px; height:38px;}
+
+  /* Radar kecil di sudut kanan atas */
+  #radarbox{top:8px; right:8px;}
+  #radar{width:72px; height:72px;}
+  #warnbanner{font-size:.62rem; padding:3px 7px;}
+
+  /* Tombol interaksi ke tepi kanan, di atas tombol Aksi — tidak menutupi tengah peta */
+  #meetbtn,#interactbtn{left:auto; right:10px; transform:none; bottom:58px; font-size:.9rem; padding:9px 16px;}
+  #meetbtn:active{transform:scale(.95);}
+
+  /* Label, petunjuk & panel lebih ramping */
+  #loclabel{top:8px; font-size:.85rem; padding:4px 12px;}
+  #camToggle{top:8px; left:8px; padding:4px 12px; font-size:.82rem; min-height:32px;}
+  #cityhint{bottom:10px; left:102px; transform:none; max-width:44%;}
+  #movehint{display:none;}
+  #locpanel{top:46px;}
+  #eatbanner{top:46px; font-size:.78rem; padding:5px 12px;}
+
+  /* Tab bar ramping: ikon + label sebaris */
+  #tabbar{padding:3px 4px calc(3px + env(safe-area-inset-bottom));}
+  #tabbar button{min-height:36px; flex-direction:row; justify-content:center; gap:5px; font-size:.8rem; padding:4px 2px;}
+  #tabbar button .ic{font-size:1.05rem;}
+  #tabbar .badge{top:-4px; right:calc(50% - 40px);}
+
+  #threadbox{height:36vh; min-height:150px;}
+  #toast{bottom:52px;}
+}
+@media (prefers-reduced-motion:reduce){
+  #cityside{transition:none;}
+}
 </style>
 </head>
 <body>
+
+<!-- ================= GERBANG PUTAR HP (portrait saja) ================= -->
+<div id="rotategate" role="alertdialog" aria-label="Putar HP kamu">
+  <div class="gateinner">
+    <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+      <path d="M60 6a54 54 0 1 1-38 16" fill="none" stroke="#ffc94d" stroke-width="5" stroke-linecap="round"/>
+      <path d="M14 8v18h18" fill="none" stroke="#ffc94d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <g id="gatephone">
+        <rect x="44" y="28" width="32" height="56" rx="7" fill="#2e2560" stroke="#f4f1ff" stroke-width="3"/>
+        <line x1="54" y1="76" x2="66" y2="76" stroke="#ff5d8f" stroke-width="4" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <h2>Putar <span>HP Kamu</span></h2>
+    <p><b style="color:var(--ink)">JANGAN KETAHUAN!</b> dimainkan dalam posisi <b style="color:var(--ink)">landscape</b> — kotanya luas dan semua kontrol disusun untuk layar miring. Game tidak bisa dimainkan dalam posisi tegak.</p>
+    <button class="bigbtn" id="gatefs">⛶ Fullscreen &amp; Kunci Landscape</button>
+    <p class="gatehint">Atau miringkan HP-mu — begitu landscape, game langsung tampil penuh.</p>
+  </div>
+</div>
 
 <!-- ================= START ================= -->
 <div class="modal open" id="startmodal">
@@ -258,6 +350,7 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
   <span class="rankpill" id="hudrank">👑 Pemula</span>
   <span class="money">💰 <span id="hudmoney">Rp0</span></span>
   <button id="menubtn">☰ Menu</button>
+  <button id="fsbtn" aria-label="Fullscreen dan kunci landscape">⛶</button>
 </header>
 
 <main id="app">
@@ -278,6 +371,7 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
         <div id="eatbanner">🍽️ Sedang makan di Warung Bu Tini…</div>
         <div id="cityhint"><div class="row"><p id="cityhinttext">🗺️ <b>Kota diperluas!</b> 👆 <b>Ketuk gedung lokasi</b> untuk ajak kencan ke sana. 🍜 Di <b>Warung Bu Tini</b> (distrik timur) kamu bisa makan beneran. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — dekati dia!</p><button id="cityhintclose" aria-label="Tutup petunjuk">✕</button></div></div>
         <div id="joy" role="application" aria-label="Joystick gerak"><div id="joystick"></div></div>
+        <button id="acttoggle" aria-label="Buka panel aksi">⚡ Aksi</button>
         <div id="movehint">Geser untuk putar kamera • WASD / joystick untuk jalan • Ketuk gedung / orang 💬 untuk berinteraksi</div>
       </div>
       <div id="cityside">
@@ -1237,6 +1331,38 @@ $("menubtn").addEventListener("click", function(){
     "<button class='bigbtn alt' style='color:var(--red)' onclick='if(confirmReset()){closeModal();}'>🗑 Hapus Save &amp; Ulang</button>"+
     "<button class='bigbtn alt' onclick='closeModal()'>Tutup</button>");
 });
+/* Panel aksi landscape: laci geser buka/tutup (di portrait tombolnya tersembunyi) */
+(function(){
+  var tg=$("acttoggle"), cs=$("cityside");
+  if(!tg||!cs) return;
+  function setOpen(open){
+    cs.classList.toggle("open", open);
+    tg.textContent= open? "✕ Tutup" : "⚡ Aksi";
+    tg.setAttribute("aria-expanded", open? "true":"false");
+  }
+  tg.addEventListener("click", function(){ setOpen(!cs.classList.contains("open")); });
+  $("actions").addEventListener("click", function(){ setOpen(false); });
+  document.querySelectorAll("#tabbar button").forEach(function(b){
+    b.addEventListener("click", function(){ setOpen(false); });
+  });
+})();
+/* Fullscreen + kunci orientasi landscape (tombol ⛶ di HUD & tombol di gerbang putar) */
+function goFullscreenLandscape(){
+  var el=document.documentElement;
+  var req=el.requestFullscreen||el.webkitRequestFullscreen;
+  var p;
+  try{ p=req? req.call(el) : null; }catch(e){ p=null; }
+  Promise.resolve(p).catch(function(){}).then(function(){
+    if(screen.orientation && screen.orientation.lock){
+      screen.orientation.lock("landscape").catch(function(){});
+    }
+  });
+}
+(function(){
+  var a=$("fsbtn"), b=$("gatefs");
+  if(a) a.addEventListener("click", goFullscreenLandscape);
+  if(b) b.addEventListener("click", goFullscreenLandscape);
+})();
 function confirmReset(){ clearSave(); showStart(); return true; }
 function showHowTo(){
   var pw=partnerWord(), PW=pw.charAt(0).toUpperCase()+pw.slice(1);
