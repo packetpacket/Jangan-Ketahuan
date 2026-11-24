@@ -4,7 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <meta name="color-scheme" content="dark" />
-<link rel="icon" href="data:," />
+<meta name="theme-color" content="#14102a" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Jangan Ketahuan" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon.svg" />
+<link rel="apple-touch-icon" href="icons/icon.svg" />
 <title>Jangan Ketahuan! — Versi GitHub Pages</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet" />
@@ -200,18 +207,14 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
 #eatbanner{position:absolute; top:52px; left:50%; transform:translateX(-50%); z-index:26; display:none; background:rgba(23,17,48,.94); border:1.5px solid var(--gold); color:var(--ink); border-radius:999px; padding:7px 16px; font-weight:900; font-size:.85rem; white-space:nowrap;}
 #eatbanner.open{display:block;}
 
-/* ---------- Landscape HP: blok lengkap ada di akhir <style> ---------- */
-@media (min-width:900px){
-  #citylayout{flex-direction:row; align-items:flex-start;}
-  #stagewrap{flex:1.7;}
-  #cityside{flex:1; display:flex; flex-direction:column; gap:10px; min-width:260px;}
-}
+/* ---------- Panel samping kota: di mode kota tampil sebagai laci geser (blok MODE KOTA di akhir <style>) ---------- */
 #cityside{display:flex; flex-direction:column; gap:10px;}
 
-/* ---------- Landscape HP: peta fullscreen, UI ramping ----------
-   Sengaja ditaruh paling akhir supaya menang atas blok min-width:900px
-   (HP landscape lebarnya bisa ≥900px). Game ini LANDSCAPE-ONLY:
-   saat portrait, layar "Putar HP" (#rotategate) menutupi seluruh game. */
+/* ---------- Mode kota fullscreen & gerbang putar ----------
+   Blok "MODE KOTA" di akhir <style> mengatur layout saat tab Kota aktif
+   (body.in-city): peta fullscreen, semua UI melayang tipis di atasnya.
+   Game ini LANDSCAPE-ONLY: saat portrait, layar "Putar HP"
+   (#rotategate) menutupi seluruh game. */
 #acttoggle{display:none;}
 #fsbtn{background:var(--card2); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:6px 12px; font-weight:900;}
 /* ---------- Gerbang putar HP (hanya tampil saat portrait) ---------- */
@@ -230,70 +233,141 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
 #gatephone{animation:gatesway 2.4s ease-in-out infinite alternate; transform-origin:60px 60px;}
 @keyframes gatesway{0%,25%{transform:rotate(0deg);}75%,100%{transform:rotate(90deg);}}
 @media (prefers-reduced-motion:reduce){ #gatephone{animation:none; transform:rotate(90deg);} }
+/* ============================================================
+   MODE KOTA — gaya "game dokter": dunia 3D jadi bintang utama.
+   Saat tab Kota aktif (body.in-city), panggung memenuhi layar dan
+   semua UI melayang tipis & semi-transparan di atasnya:
+   • kiri atas   : kartu status ringkas (hari/slot, energi, pacar, uang)
+   • kanan atas  : minimap BULAT kecil + tombol bundar (menu, ⛶, kamera)
+   • kiri bawah  : joystick kecil semi-transparan
+   • kanan bawah : SATU tombol ⚡ membuka lembar aksi ramping
+                   (lembar menutup sendiri setelah aksi dipilih)
+   • panel lokasi & modal: lembar samping SEMPIT di tepi kanan
+   • tombol kontekstual (Ajak Kenalan/Sapa): kecil, menempel di tepi
+   • tab bawah   : pil melayang kecil di tengah bawah
+   Kapan pun tidak ada panel terbuka, yang terlihat adalah kotanya.
+   ============================================================ */
+body.in-city{overflow:hidden;}
+body.in-city #app{max-width:none; padding:0;}
+body.in-city #view-city{position:fixed; inset:0; z-index:30; background:#0b0920;}
+body.in-city #citylayout{flex-direction:column; height:100%; gap:0;}
+body.in-city #stagewrap{flex:none; width:100%; height:100%; min-height:0; aspect-ratio:auto; border:none; border-radius:0;}
+
+/* --- Kartu status ringkas kiri atas (HUD lama, jadi kartu melayang) --- */
+body.in-city #hud{position:fixed; top:calc(8px + env(safe-area-inset-top)); left:8px; z-index:46;
+  width:max-content; max-width:min(430px,62vw); flex-wrap:wrap; gap:3px 10px; align-items:center;
+  padding:7px 12px; background:rgba(20,16,42,.82); border:1.5px solid rgba(255,255,255,.16);
+  border-radius:14px;
+  font-size:.78rem; box-shadow:0 6px 18px rgba(0,0,0,.35);}
+body.in-city #hud .daypill{padding:2px 9px; font-size:.76rem; background:rgba(46,37,96,.85);}
+body.in-city #hud .rankpill{padding:2px 9px; font-size:.76rem;}
+body.in-city #hud .energywrap{font-size:.78rem; gap:4px;}
+body.in-city #hud .energybar{width:52px; height:9px;}
+body.in-city #hud .money{margin-left:0; font-size:.9rem;}
+body.in-city #hud>span{white-space:nowrap;}
+
+/* --- Tombol bundar kecil kanan atas: Menu & Fullscreen --- */
+body.in-city #menubtn, body.in-city #fsbtn{position:fixed; right:10px; z-index:47;
+  width:42px; height:42px; min-height:42px; padding:0; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:1rem;
+  background:rgba(20,16,42,.8); border:1.5px solid rgba(255,255,255,.22); color:var(--ink);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); box-shadow:0 4px 12px rgba(0,0,0,.4);}
+body.in-city #menubtn{top:calc(104px + env(safe-area-inset-top)); font-size:0;}
+body.in-city #menubtn::after{content:"\2630"; font-size:1.05rem;}
+body.in-city #fsbtn{top:calc(152px + env(safe-area-inset-top));}
+
+/* --- Minimap BULAT kecil kanan atas (radar lama, diperkecil) --- */
+body.in-city #radarbox{top:calc(8px + env(safe-area-inset-top)); right:8px; z-index:31;}
+body.in-city #radar{width:86px; height:86px; border:2.5px solid rgba(255,255,255,.35);
+  box-shadow:0 4px 14px rgba(0,0,0,.45); background:rgba(10,8,28,.6);}
+body.in-city #warnbanner{font-size:.6rem; padding:3px 7px; margin-top:4px;}
+
+/* --- Tombol kamera: bundar kecil di tumpukan kanan --- */
+body.in-city #camToggle{position:fixed; top:calc(200px + env(safe-area-inset-top)); right:10px; left:auto; z-index:47;
+  width:42px; height:42px; min-height:42px; padding:0; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;
+  font-size:.92rem; line-height:1.1; background:rgba(20,16,42,.8); border:1.5px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); box-shadow:0 4px 12px rgba(0,0,0,.4);}
+body.in-city #camToggle small{font-size:.5rem; font-weight:900; letter-spacing:.4px;}
+
+/* --- Label lokasi & banner makan: pil kecil di tengah, di bawah kartu status --- */
+body.in-city #loclabel{top:calc(80px + env(safe-area-inset-top)); font-size:.82rem; padding:4px 13px; background:rgba(62,48,140,.85);}
+body.in-city #eatbanner{top:calc(114px + env(safe-area-inset-top)); font-size:.78rem; padding:5px 12px; background:rgba(23,17,48,.88);}
+
+/* --- Joystick kecil semi-transparan kiri bawah --- */
+body.in-city #joy{width:84px; height:84px; left:12px; bottom:calc(12px + env(safe-area-inset-bottom)); background:rgba(255,255,255,.08);}
+body.in-city #joystick{width:38px; height:38px;}
+
+/* --- SATU tombol aksi (FAB bundar) kanan bawah --- */
+body.in-city #acttoggle{display:flex; position:absolute; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:32;
+  width:54px; height:54px; min-height:54px; padding:0; border-radius:50%;
+  flex-direction:column; align-items:center; justify-content:center; gap:0;
+  background:rgba(255,93,143,.92); color:#fff; border:2px solid rgba(255,255,255,.5);
+  font-weight:900; font-size:1.15rem; line-height:1.05; box-shadow:0 6px 16px rgba(0,0,0,.45);}
+body.in-city #acttoggle small{font-size:.52rem; letter-spacing:.6px;}
+
+/* --- Lembar aksi: laci sempit dari kanan, menutup sendiri setelah aksi dipilih --- */
+body.in-city #cityside{position:fixed; top:0; right:0; bottom:0; z-index:45;
+  width:min(272px,76vw); min-width:0; padding:calc(12px + env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(23,17,48,.94); border-left:2px solid var(--line);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  overflow-y:auto; transform:translateX(106%); transition:transform .25s ease; box-shadow:-10px 0 28px rgba(0,0,0,.45);}
+body.in-city #cityside.open{transform:translateX(0);}
+body.in-city #actions{grid-template-columns:repeat(2,1fr); gap:8px;}
+body.in-city .actbtn{padding:10px 4px 8px;}
+body.in-city .actbtn .ic{font-size:1.4rem;}
+body.in-city .actbtn b{font-size:.9rem;}
+body.in-city #logbox{font-size:.8rem; max-height:32vh; background:rgba(37,30,77,.75);}
+
+/* --- Panel lokasi: lembar samping SEMPIT di tepi kanan --- */
+body.in-city #locpanel{top:0; right:0; bottom:0; left:auto; transform:none;
+  width:min(292px,80vw); max-height:none; height:100%; border-radius:18px 0 0 18px;
+  border:none; border-left:1.5px solid var(--pink); background:rgba(23,17,48,.93);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); padding:14px 12px calc(14px + env(safe-area-inset-bottom));}
+body.in-city #locpanel.open{animation:sheetin .22s ease;}
+@keyframes sheetin{from{transform:translateX(24px); opacity:.4;} to{transform:translateX(0); opacity:1;}}
+
+/* --- Modal dalam game (menu, pilih pacar, hadiah): lembar kanan juga --- */
+body.in-city #modal{justify-content:flex-end; padding:0;}
+body.in-city #modal .sheet{width:min(320px,86vw); max-width:none; height:100%; max-height:100%;
+  border-radius:18px 0 0 18px; border:none; border-left:2px solid var(--line); background:rgba(29,24,64,.97);}
+
+/* --- Tombol kontekstual: kecil, menempel di tepi kanan di atas FAB --- */
+body.in-city #meetbtn, body.in-city #interactbtn{left:auto; right:12px; transform:none;
+  bottom:calc(76px + env(safe-area-inset-bottom)); font-size:.84rem; padding:8px 14px;}
+body.in-city #meetbtn:active, body.in-city #interactbtn:active{transform:scale(.95);}
+
+/* --- Petunjuk awal: pil tipis tengah bawah, di atas pil tab --- */
+body.in-city #cityhint{bottom:calc(64px + env(safe-area-inset-bottom)); max-width:min(480px,58vw); background:rgba(23,17,48,.9);}
+body.in-city #cityhint p{font-size:.72rem;}
+body.in-city #movehint{display:none;}
+
+/* --- Tab bawah: pil melayang kecil di tengah --- */
+body.in-city #tabbar{left:50%; right:auto; transform:translateX(-50%);
+  bottom:calc(8px + env(safe-area-inset-bottom)); width:max-content; max-width:96vw;
+  border:1.5px solid rgba(255,255,255,.16); border-radius:999px; padding:4px 6px;
+  background:rgba(20,16,42,.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 8px 22px rgba(0,0,0,.45);}
+body.in-city #tabbar button{min-height:38px; flex-direction:row; justify-content:center; gap:5px;
+  font-size:.78rem; padding:5px 12px; border-radius:999px;}
+body.in-city #tabbar button .ic{font-size:1.05rem;}
+body.in-city #tabbar button.on{background:rgba(255,93,143,.22);}
+body.in-city #tabbar .badge{top:-5px; right:2px;}
+body.in-city #toast{bottom:calc(64px + env(safe-area-inset-bottom));}
+body.in-city #threadbox{height:52vh;}
+
+/* ---------- Landscape pendek: rampingkan chrome di tab lain ---------- */
 @media (orientation:landscape) and (max-height:560px){
-  /* HUD: satu baris tipis, tidak membungkus */
-  #hud{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; padding:4px 8px; gap:4px 10px; font-size:.8rem;}
-  #hud::-webkit-scrollbar{display:none;}
-  #hud>span{white-space:nowrap;}
-  #hud .daypill{padding:2px 10px; font-size:.78rem;}
-  #hud .rankpill{padding:2px 10px; font-size:.78rem;}
-  #hud .energywrap{font-size:.8rem;}
-  #hud .energybar{width:56px; height:10px;}
-  #hud .money{font-size:.92rem;}
-  #menubtn{padding:3px 10px; min-height:30px; font-size:.82rem;}
-  #fsbtn{padding:3px 10px; min-height:30px; font-size:.82rem;}
-
-  /* Panggung kota memenuhi hampir seluruh layar */
-  #app{padding:6px 6px 46px; max-width:none;}
-  #citylayout{flex-direction:column;}
-  #stagewrap{flex:none; width:100%; aspect-ratio:auto; height:calc(100vh - 96px); height:calc(100dvh - 96px); min-height:210px;}
-
-  /* Panel aksi + log: laci geser dari kanan, default tertutup */
-  #cityside{position:fixed; top:42px; right:0; bottom:46px; width:min(300px,74vw); min-width:0; z-index:45;
-    background:rgba(23,17,48,.97); border-left:2px solid var(--line); padding:10px;
-    overflow-y:auto; transform:translateX(105%); transition:transform .25s ease; box-shadow:-10px 0 28px rgba(0,0,0,.45);}
-  #cityside.open{transform:translateX(0);}
-  #actions{grid-template-columns:repeat(2,1fr);}
-  #acttoggle{display:block; position:absolute; right:10px; bottom:10px; z-index:32;
-    background:rgba(255,93,143,.92); color:#fff; border:2px solid rgba(255,255,255,.55);
-    border-radius:999px; padding:8px 16px; font-weight:900; font-size:.85rem; box-shadow:0 6px 16px rgba(0,0,0,.45);}
-
-  /* Joystick kecil di sudut kiri bawah */
-  #joy{width:82px; height:82px; left:10px; bottom:10px;}
-  #joystick{width:38px; height:38px;}
-
-  /* Radar kecil di sudut kanan atas */
-  #radarbox{top:8px; right:8px;}
-  #radar{width:72px; height:72px;}
-  #warnbanner{font-size:.62rem; padding:3px 7px;}
-
-  /* Tombol interaksi ke tepi kanan, di atas tombol Aksi — tidak menutupi tengah peta */
-  #meetbtn,#interactbtn{left:auto; right:10px; transform:none; bottom:58px; font-size:.9rem; padding:9px 16px;}
-  #meetbtn:active{transform:scale(.95);}
-
-  /* Label, petunjuk & panel lebih ramping */
-  #loclabel{top:8px; font-size:.85rem; padding:4px 12px;}
-  #camToggle{top:8px; left:8px; padding:4px 12px; font-size:.82rem; min-height:32px;}
-  #cityhint{bottom:10px; left:102px; transform:none; max-width:44%;}
-  #movehint{display:none;}
-  #locpanel{top:46px;}
-  #eatbanner{top:46px; font-size:.78rem; padding:5px 12px;}
-
-  /* Tab bar ramping: ikon + label sebaris */
-  #tabbar{padding:3px 4px calc(3px + env(safe-area-inset-bottom));}
-  #tabbar button{min-height:36px; flex-direction:row; justify-content:center; gap:5px; font-size:.8rem; padding:4px 2px;}
-  #tabbar button .ic{font-size:1.05rem;}
-  #tabbar .badge{top:-4px; right:calc(50% - 40px);}
-
   #threadbox{height:36vh; min-height:150px;}
   #toast{bottom:52px;}
 }
 @media (prefers-reduced-motion:reduce){
-  #cityside{transition:none;}
+  body.in-city #cityside{transition:none;}
+  body.in-city #locpanel.open{animation:none;}
 }
 </style>
 </head>
-<body>
+<body class="in-city">
 
 <!-- ================= GERBANG PUTAR HP (portrait saja) ================= -->
 <div id="rotategate" role="alertdialog" aria-label="Putar HP kamu">
@@ -359,7 +433,7 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
     <div id="citylayout">
       <div id="stagewrap">
         <canvas class="gl" id="gl"></canvas>
-        <button id="camToggle">🎥 TPP</button>
+        <button id="camToggle" aria-label="Ganti mode kamera">🎥<small>TPP</small></button>
         <div id="loclabel">🏠 Kos</div>
         <div id="radarbox">
           <canvas id="radar" width="118" height="118"></canvas>
@@ -371,7 +445,7 @@ ol.ghsteps{color:var(--muted); line-height:1.65; padding-left:20px;} ol.ghsteps 
         <div id="eatbanner">🍽️ Sedang makan di Warung Bu Tini…</div>
         <div id="cityhint"><div class="row"><p id="cityhinttext">🗺️ <b>Kota diperluas!</b> 👆 <b>Ketuk gedung lokasi</b> untuk ajak kencan ke sana. 🍜 Di <b>Warung Bu Tini</b> (distrik timur) kamu bisa makan beneran. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — dekati dia!</p><button id="cityhintclose" aria-label="Tutup petunjuk">✕</button></div></div>
         <div id="joy" role="application" aria-label="Joystick gerak"><div id="joystick"></div></div>
-        <button id="acttoggle" aria-label="Buka panel aksi">⚡ Aksi</button>
+        <button id="acttoggle" aria-label="Buka panel aksi">⚡<small>AKSI</small></button>
         <div id="movehint">Geser untuk putar kamera • WASD / joystick untuk jalan • Ketuk gedung / orang 💬 untuk berinteraksi</div>
       </div>
       <div id="cityside">
@@ -1264,6 +1338,9 @@ function endGame(finished, reason){
 function switchView(v){
   document.querySelectorAll(".view").forEach(function(el){el.classList.remove("active");});
   $("view-"+v).classList.add("active");
+  /* Mode kota (body.in-city): panggung fullscreen + UI melayang ala game dokter */
+  document.body.classList.toggle("in-city", v==="city");
+  if(v==="city"){ setTimeout(function(){ window.dispatchEvent(new Event("resize")); }, 60); }
   document.querySelectorAll("#tabbar button").forEach(function(b){ b.classList.toggle("on", b.dataset.view===v); });
   if(v!=="phone"){ $("chatlistwrap").style.display="block"; $("threadwrap").style.display="none"; currentThreadUid=null; renderChatList(); }
   if(v==="roster") renderRoster();
@@ -1337,7 +1414,7 @@ $("menubtn").addEventListener("click", function(){
   if(!tg||!cs) return;
   function setOpen(open){
     cs.classList.toggle("open", open);
-    tg.textContent= open? "✕ Tutup" : "⚡ Aksi";
+    tg.innerHTML= open? "✕<small>TUTUP</small>" : "⚡<small>AKSI</small>";
     tg.setAttribute("aria-expanded", open? "true":"false");
   }
   tg.addEventListener("click", function(){ setOpen(!cs.classList.contains("open")); });
@@ -1384,8 +1461,9 @@ function showGhGuide(){
     "<li>Buat repository baru di <b>github.com</b> (mis. <b>jangan-ketahuan</b>), set <b>Public</b>.</li>"+
     "<li>Upload file itu, lalu <b>rename menjadi index.html</b> di repo.</li>"+
     "<li>Buka <b>Settings → Pages</b>, pilih branch <b>main</b> / root, simpan.</li>"+
-    "<li>Tunggu ±1 menit — game live di <b>https://username.github.io/jangan-ketahuan/</b></li></ol>"+
-    "<p>Catatan: GitHub Pages hanya melayani file statis, jadi save game tersimpan di browser/HP masing-masing pemain (localStorage), bukan di server. Butuh koneksi internet untuk library 3D (Three.js) &amp; font dari CDN.</p>"+
+    "<li>Tunggu ±1 menit — game live di <b>https://username.github.io/jangan-ketahuan/</b></li>"+
+    "<li><b>Bonus PWA (bisa di-install seperti aplikasi):</b> upload juga file <b>manifest.webmanifest</b>, <b>sw.js</b>, dan folder <b>icons/</b> (berisi icon.svg) ke repo yang sama, sejajar dengan index.html — file-file ini memang harus terpisah, tidak bisa ditanam di dalam HTML. Setelah itu pemain bisa memilih <b>“Tambahkan ke Layar Utama / Install app”</b> di browser HP dan game berjalan fullscreen landscape seperti aplikasi.</li></ol>"+
+    "<p>Catatan: GitHub Pages hanya melayani file statis, jadi save game tersimpan di browser/HP masing-masing pemain (localStorage), bukan di server. Butuh koneksi internet untuk library 3D (Three.js) &amp; font dari CDN saat pertama kali dibuka; setelah itu file inti game tersimpan di cache PWA.</p>"+
     "<button class='bigbtn' onclick='closeModal();exportSingleFile()'>⬇ Export Sekarang</button>"+
     "<button class='bigbtn alt' onclick='closeModal()'>Tutup</button>");
 }
@@ -1917,7 +1995,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
   var camBtn=document.getElementById("camToggle");
   camBtn.addEventListener("click",function(){
     P.fpp=!P.fpp;
-    camBtn.textContent=P.fpp? "🎥 FPP":"🎥 TPP";
+    camBtn.innerHTML=P.fpp? "🎥<small>FPP</small>":"🎥<small>TPP</small>";
     playerHolder.visible=!P.fpp;
   });
 
@@ -2205,6 +2283,15 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
   tick();
   if(window.S) rebuildNpcs();
 })();
+</script>
+<script>
+/* Registrasi Service Worker (PWA) — aman bila gagal: file://, browser lama,
+   atau sw.js belum ikut ter-upload tidak akan mengganggu game sama sekali. */
+if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

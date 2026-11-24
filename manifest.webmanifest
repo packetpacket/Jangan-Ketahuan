@@ -1,0 +1,16 @@
+{
+  "name": "Jangan Ketahuan!",
+  "short_name": "Jangan Ketahuan",
+  "description": "Game mengelola pacar tanpa ketahuan — cari pacar sebanyak-banyaknya, jangan sampai ketahuan.",
+  "id": "jangan-ketahuan",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "theme_color": "#14102a",
+  "background_color": "#14102a",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
