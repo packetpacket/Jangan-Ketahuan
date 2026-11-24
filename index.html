@@ -59,9 +59,20 @@ h1,h2,h3{margin:0;}
 #meetbtn{position:absolute; bottom:118px; left:50%; transform:translateX(-50%); display:none; z-index:30; background:var(--pink); color:#fff; border:2px solid rgba(255,255,255,.55); border-radius:999px; padding:12px 24px; font-weight:900; font-size:1.05rem; box-shadow:0 8px 22px rgba(0,0,0,.5); white-space:nowrap;}
 #meetbtn:active{transform:translateX(-50%) scale(.95);}
 /* joystick virtual — satu-satunya kontrol arah sentuh; z-index di atas semua overlay kota */
-#joy{position:absolute; left:14px; bottom:14px; width:118px; height:118px; border-radius:50%; background:rgba(255,255,255,.10); border:2px solid rgba(255,255,255,.28); touch-action:none; z-index:30;}
+#joy{position:absolute; left:14px; bottom:14px; width:132px; height:132px; border-radius:50%; background:rgba(255,255,255,.10); border:2px solid rgba(255,255,255,.28); touch-action:none; z-index:30;}
 #joy.on{background:rgba(255,255,255,.2);}
-#joystick{position:absolute; left:50%; top:50%; width:52px; height:52px; border-radius:50%; background:rgba(255,93,143,.95); box-shadow:0 4px 10px rgba(0,0,0,.4); pointer-events:none; transform:translate(-50%,-50%);}
+#joystick{position:absolute; left:50%; top:50%; width:56px; height:56px; border-radius:50%; background:rgba(255,93,143,.95); box-shadow:0 4px 10px rgba(0,0,0,.4); pointer-events:none; transform:translate(-50%,-50%);}
+/* ---------- Misi Harian ---------- */
+#missionbtn{background:linear-gradient(135deg,#3a2a00,#5a4300); color:var(--gold); border:1.5px solid var(--gold); border-radius:999px; padding:4px 12px; font-weight:900; font-size:.85rem;}
+#missionbtn.doneall{background:var(--green); color:#052e16; border-color:#fff;}
+.missionitem{background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; margin-top:8px; text-align:left;}
+.missionitem.done{border-color:var(--green);}
+.missionitem.failed{border-color:var(--red); opacity:.85;}
+.missionitem .mtitle{font-weight:900; display:flex; justify-content:space-between; gap:8px;}
+.missionitem .mbar{height:10px; background:#0e0b20; border-radius:99px; overflow:hidden; margin-top:6px;}
+.missionitem .mbar>i{display:block; height:100%; background:var(--gold); border-radius:99px; transition:width .3s;}
+.missionitem.done .mbar>i{background:var(--green);}
+.missionitem .mdesc{font-size:.82rem; color:var(--muted); line-height:1.4; margin-top:4px;}
 /* panel lokasi hasil tap gedung/plang */
 #locpanel{position:absolute; top:52px; left:50%; transform:translateX(-50%); width:min(94%,460px); max-height:calc(100% - 64px); overflow-y:auto; z-index:25; display:none; background:rgba(23,17,48,.96); border:1.5px solid var(--pink); border-radius:18px; padding:12px 14px; box-shadow:0 12px 30px rgba(0,0,0,.5);}
 #locpanel.open{display:block;}
@@ -272,18 +283,18 @@ body.in-city #menubtn, body.in-city #fsbtn{position:fixed; right:10px; z-index:4
   display:flex; align-items:center; justify-content:center; font-size:1rem;
   background:rgba(20,16,42,.8); border:1.5px solid rgba(255,255,255,.22); color:var(--ink);
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); box-shadow:0 4px 12px rgba(0,0,0,.4);}
-body.in-city #menubtn{top:calc(104px + env(safe-area-inset-top)); font-size:0;}
+body.in-city #menubtn{top:calc(114px + env(safe-area-inset-top)); font-size:0;}
 body.in-city #menubtn::after{content:"\2630"; font-size:1.05rem;}
-body.in-city #fsbtn{top:calc(152px + env(safe-area-inset-top));}
+body.in-city #fsbtn{top:calc(162px + env(safe-area-inset-top));}
 
 /* --- Minimap BULAT kecil kanan atas (radar lama, diperkecil) --- */
 body.in-city #radarbox{top:calc(8px + env(safe-area-inset-top)); right:8px; z-index:31;}
-body.in-city #radar{width:86px; height:86px; border:2.5px solid rgba(255,255,255,.35);
+body.in-city #radar{width:96px; height:96px; border:2.5px solid rgba(255,255,255,.35);
   box-shadow:0 4px 14px rgba(0,0,0,.45); background:rgba(10,8,28,.6);}
 body.in-city #warnbanner{font-size:.6rem; padding:3px 7px; margin-top:4px;}
 
 /* --- Tombol kamera: bundar kecil di tumpukan kanan --- */
-body.in-city #camToggle{position:fixed; top:calc(200px + env(safe-area-inset-top)); right:10px; left:auto; z-index:47;
+body.in-city #camToggle{position:fixed; top:calc(210px + env(safe-area-inset-top)); right:10px; left:auto; z-index:47;
   width:42px; height:42px; min-height:42px; padding:0; border-radius:50%;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;
   font-size:.92rem; line-height:1.1; background:rgba(20,16,42,.8); border:1.5px solid rgba(255,255,255,.22);
@@ -294,9 +305,10 @@ body.in-city #camToggle small{font-size:.5rem; font-weight:900; letter-spacing:.
 body.in-city #loclabel{top:calc(80px + env(safe-area-inset-top)); font-size:.82rem; padding:4px 13px; background:rgba(62,48,140,.85);}
 body.in-city #eatbanner{top:calc(114px + env(safe-area-inset-top)); font-size:.78rem; padding:5px 12px; background:rgba(23,17,48,.88);}
 
-/* --- Joystick kecil semi-transparan kiri bawah --- */
-body.in-city #joy{width:84px; height:84px; left:12px; bottom:calc(12px + env(safe-area-inset-bottom)); background:rgba(255,255,255,.08);}
-body.in-city #joystick{width:38px; height:38px;}
+/* --- Joystick BESAR semi-transparan kiri bawah (nyaman buat jempol, 132px / knob 56px) --- */
+body.in-city #joy{width:132px; height:132px; left:14px; bottom:calc(14px + env(safe-area-inset-bottom)); background:rgba(255,255,255,.09); border:2.5px solid rgba(255,255,255,.32); box-shadow:0 6px 20px rgba(0,0,0,.35);}
+body.in-city #joystick{width:56px; height:56px; box-shadow:0 5px 14px rgba(0,0,0,.5);}
+body.in-city #missionbtn{padding:2px 9px; font-size:.76rem;}
 
 /* --- SATU tombol aksi (FAB bundar) kanan bawah --- */
 body.in-city #acttoggle{display:flex; position:absolute; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:32;
@@ -411,7 +423,8 @@ body.in-city #threadbox{height:52vh;}
     <button class="bigbtn" id="new30">▶ Mode 30 Hari — Santai</button>
     <button class="bigbtn alt" id="new7">⚡ Mode 7 Hari — Cepat &amp; Brutal</button>
     <p class="center" style="font-size:.85rem">Versi GitHub Pages (statis): progres tersimpan otomatis di browser/HP ini (localStorage). Tombol <b>Export HTML</b> di menu mengunduh satu file HTML utuh yang siap di-upload ke GitHub Pages.</p>
-    <p class="center" style="font-size:.85rem">Gerak: <span class="kbd">W A S D</span> / joystick virtual. Geser layar kota untuk memutar kamera. <b>Ketuk gedung lokasi</b> untuk membuka panelnya dan ajak pacar kencan ke sana. Kotanya sekarang luas (180×180) — ada distrik timur (🍜 Warung Makan Bu Tini &amp; 🎡 Pasar Malam) dan distrik selatan (🏘️ Kampung Melati &amp; 🛶 Danau Biru). Di warung kamu bisa <b>makan beneran</b> dengan animasi menyuap. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — tapi PDKT berhasil baru jadi <b>🤝 Kenalan</b>: naikkan kedekatannya sampai 70% lewat chat, kencan &amp; hadiah, lalu <b>Tembak / Jadian</b> di tab Pacar.</p>
+    <p class="center" style="font-size:.85rem">Gerak: <span class="kbd">W A S D</span> / joystick virtual besar. Geser layar kota untuk memutar kamera. <b>Ketuk gedung lokasi</b> untuk membuka panelnya dan ajak pacar kencan ke sana. Kotanya sekarang JAUH lebih luas (280×280) — distrik timur (🍜 Warung Bu Tini &amp; 🎡 Pasar Malam), distrik selatan (🏘️ Kampung Melati &amp; 🛶 Danau Biru), barat (🚉 Stasiun Kota), taman kota berair mancur, pantai berpayung, dan pusat kota bergedung tinggi. Di warung kamu bisa <b>makan beneran</b> dengan animasi menyuap. Orang bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — tapi PDKT berhasil baru jadi <b>🤝 Kenalan</b>: naikkan kedekatannya sampai 70% lewat chat, kencan &amp; hadiah, lalu <b>Tembak / Jadian</b> di tab Pacar.</p>
+    <p class="center" style="font-size:.85rem">🎯 <b>Misi Harian:</b> tiap hari ada 3 misi (tombol 🎯 di atas). Selesaikan untuk dapat uang + affection + streak 🔥. Misi yang gagal saat hari berakhir menaikkan kecurigaan pacar dan memutus streak — laporan malam akan menampilkannya.</p>
   </div>
 </div>
 
@@ -422,6 +435,7 @@ body.in-city #threadbox{height:52vh;}
   <span style="font-weight:800">💘 <span id="hudgf">0</span> pacar</span>
   <span id="hudkenalan" style="display:none;font-weight:800">🤝 <span id="hudkenalann">0</span> kenalan</span>
   <span class="rankpill" id="hudrank">👑 Pemula</span>
+  <button id="missionbtn" onclick="openMissions()" aria-label="Buka panel misi harian">🎯 Misi 0/3 • 🔥0</button>
   <span class="money">💰 <span id="hudmoney">Rp0</span></span>
   <button id="menubtn">☰ Menu</button>
   <button id="fsbtn" aria-label="Fullscreen dan kunci landscape">⛶</button>
@@ -539,7 +553,9 @@ var LOCATIONS = [
   {id:"warung", name:"Warung Makan Bu Tini", icon:"🍜", x:50, z:-24, color:0xfb923c, cost:35000, energy:10, affection:11, risk:0.20, desc:"Warung legendaris di distrik timur. Bisa makan sendiri buat memulihkan energi, atau traktir pacar makan bareng — ada animasi makannya beneran!"},
   {id:"pasar",  name:"Pasar Malam", icon:"🎡", x:54,  z:16,  color:0xfacc15, cost:80000,  energy:16, affection:12, risk:0.38, desc:"Lampu warna-warni, jajanan, dan bianglala mini. Seru banget — tapi SEMUA orang ke sini. Risiko tabrakan paling tinggi."},
   {id:"perumahan", name:"Kampung Melati", icon:"🏘️", x:-34, z:50, color:0xa3e635, cost:10000, energy:8, affection:8, risk:0.08, desc:"Kawasan perumahan yang tenang di selatan kota. Jalan-jalan sore di sini hampir tak pernah ada saksi."},
-  {id:"danau",  name:"Danau Biru", icon:"🛶", x:26,  z:50,  color:0x38bdf8, cost:30000,  energy:12, affection:13, risk:0.10, desc:"Tepi danau yang adem di distrik selatan. Naik perahu bebek berdua, jauh dari mata-mata kota."}
+  {id:"danau",  name:"Danau Biru", icon:"🛶", x:26,  z:50,  color:0x38bdf8, cost:30000,  energy:12, affection:13, risk:0.10, desc:"Tepi danau yang adem di distrik selatan. Naik perahu bebek berdua, jauh dari mata-mata kota."},
+  {id:"stasiun", name:"Stasiun Kota", icon:"🚉", x:-58, z:-36, color:0x94a3b8, cost:12000, energy:8, affection:9, risk:0.14, desc:"Stasiun tua di distrik barat. Jemput dia pulang naik kereta — romantis ala film, peronnya sepi di luar jam sibuk."},
+  {id:"alun", name:"Alun-Alun Pusat Kota", icon:"🏙️", x:6, z:-58, color:0xf472b6, cost:20000, energy:10, affection:11, risk:0.28, desc:"Jantung pusat kota di antara gedung-gedung tinggi. Air mancur, lampu warna-warni — indah tapi semua orang lewat sini."}
 ];
 function locById(id){ for(var i=0;i<LOCATIONS.length;i++) if(LOCATIONS[i].id===id) return LOCATIONS[i]; return LOCATIONS[0]; }
 
@@ -618,7 +634,9 @@ var MEET_SPOTS = [
   {place:"warung", line:"Antrean warung Bu Tini: pesanannya tertukar dengan pesananmu, dan dia malah tertawa…"},
   {place:"pasar", line:"Dia lagi mencoba permainan lempar gelang di pasar malam dan selalu meleset…"},
   {place:"perumahan", line:"Dia lagi jalan sore mengajak anjing tetangganya keliling Kampung Melati…"},
-  {place:"danau", line:"Dia lagi memberi makan ikan di tepi Danau Biru dan hampir menjatuhkan HP-nya…"}
+  {place:"danau", line:"Dia lagi memberi makan ikan di tepi Danau Biru dan hampir menjatuhkan HP-nya…"},
+  {place:"stasiun", line:"Dia lagi kebingungan melihat papan jadwal kereta di Stasiun Kota…"},
+  {place:"alun", line:"Dia lagi foto-foto di depan air mancur Alun-Alun Pusat Kota…"}
 ];
 var MEET_SPOTS_M = [
   {place:"kafe", line:"Cowok itu lagi baca buku sendirian di pojok kafe…"},
@@ -632,7 +650,9 @@ var MEET_SPOTS_M = [
   {place:"warung", line:"Antrean warung Bu Tini: pesanannya tertukar dengan pesananmu, dan dia malah tertawa…"},
   {place:"pasar", line:"Dia lagi mencoba permainan lempar gelang di pasar malam dan selalu meleset…"},
   {place:"perumahan", line:"Dia lagi jalan sore mengajak anjing tetangganya keliling Kampung Melati…"},
-  {place:"danau", line:"Dia lagi memberi makan ikan di tepi Danau Biru dan hampir menjatuhkan HP-nya…"}
+  {place:"danau", line:"Dia lagi memberi makan ikan di tepi Danau Biru dan hampir menjatuhkan HP-nya…"},
+  {place:"stasiun", line:"Dia lagi kebingungan melihat papan jadwal kereta di Stasiun Kota…"},
+  {place:"alun", line:"Dia lagi foto-foto di depan air mancur Alun-Alun Pusat Kota…"}
 ];
 var PDKT_LINES = [
   {text:"“Maaf, sepertinya kita ditakdirkan duduk bersebelahan hari ini.”", quality:0.75},
@@ -726,6 +746,77 @@ var EVENTS = [
   {title:"🤧 Kamu Kurang Fit", text:"Kecapekan mengelola banyak hati. Energi hari ini terasa berat.", apply:function(){ S.energy=Math.max(5,S.energy-25); }}
 ];
 
+/* ---------------- MISI HARIAN ----------------
+   Tiap hari 3 misi acak yang adil dalam 4 slot. Selesai = hadiah langsung
+   (uang + affection). Gagal saat hari berakhir = suspicion pacar acak naik,
+   streak putus, tanpa bonus harian. Laporan malam merangkum semuanya. */
+var MISSION_TEMPLATES = [
+  {type:"date", target:2, icon:"❤️", title:"Kencan dengan 2 pacar", desc:"Ajak kencan 2 kali hari ini (boleh pacar/kenalan berbeda). Memakai slot.", rewardMoney:40000, rewardAff:3},
+  {type:"date", target:1, icon:"❤️", title:"Kencan 1 kali hari ini", desc:"Ajak satu pacar/kenalan kencan ke lokasi mana pun.", rewardMoney:30000, rewardAff:3},
+  {type:"work", target:150000, icon:"💼", title:"Hasilkan Rp150.000 dari kerja", desc:"Kerja part-time sampai total gaji hari ini mencapai Rp150.000 (biasanya cukup 1x kerja).", rewardMoney:25000, rewardAff:2, moneyTarget:true},
+  {type:"chat", target:3, icon:"💬", title:"Kirim 3 chat yang bikin pacar senang", desc:"Balas chat dengan jawaban terbaik (yang menaikkan affection banyak) sebanyak 3 kali. Tidak memakai slot.", rewardMoney:30000, rewardAff:3},
+  {type:"meet", target:1, icon:"💘", title:"Kenalan dengan 1 orang baru", desc:"PDKT berhasil ke orang bertanda 💬 di kota atau lewat tombol Kenalan. Memakai 1 slot.", rewardMoney:35000, rewardAff:2},
+  {type:"eat", target:1, icon:"🍜", title:"Traktir makan di Warung Bu Tini", desc:"Pesan makanan di warung dengan pilihan 'makan bareng' salah satu pacar/kenalan. Tidak memakai slot.", rewardMoney:30000, rewardAff:4},
+  {type:"gift", target:1, icon:"🎁", title:"Beri 1 hadiah ke pacar/kenalan", desc:"Beli hadiah di Toko dan berikan ke seseorang. Tidak memakai slot.", rewardMoney:25000, rewardAff:3},
+  {type:"gift", target:2, icon:"🎁", title:"Beri hadiah ke 2 orang", desc:"Berikan hadiah ke 2 pacar/kenalan berbeda hari ini. Tidak memakai slot.", rewardMoney:45000, rewardAff:4},
+  {type:"safe", target:1, icon:"🕵️", title:"Jangan sampai ketahuan seharian", desc:"Tidak ada pacar yang memergokimu hari ini. Dinilai saat hari berakhir.", rewardMoney:50000, rewardAff:4}
+];
+function genMissions(day){
+  var pool=MISSION_TEMPLATES.slice();
+  /* Acak sederhana berdasarkan hari supaya bervariasi */
+  for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+  var picked=[], slotHeavy=0;
+  for(var k=0;k<pool.length && picked.length<3;k++){
+    var tpl=pool[k];
+    var heavy=(tpl.type==="date"&&tpl.target>=2)||tpl.type==="meet"||tpl.type==="work";
+    if(heavy && slotHeavy>=2) continue;
+    /* Hindari dua misi tipe sama persis */
+    if(picked.some(function(p){return p.type===tpl.type && p.target===tpl.target;})) continue;
+    if(heavy) slotHeavy++;
+    picked.push({type:tpl.type, target:tpl.target, icon:tpl.icon, title:tpl.title, desc:tpl.desc, rewardMoney:tpl.rewardMoney, rewardAff:tpl.rewardAff, moneyTarget:!!tpl.moneyTarget, progress:0, done:false, failed:false});
+  }
+  /* Hari pertama selalu ada misi aman supaya pemain belajar sistemnya */
+  if(day===1 && !picked.some(function(p){return p.type==="safe";})){
+    var safe=MISSION_TEMPLATES.filter(function(t){return t.type==="safe";})[0];
+    picked[2]={type:safe.type,target:safe.target,icon:safe.icon,title:safe.title,desc:safe.desc,rewardMoney:safe.rewardMoney,rewardAff:safe.rewardAff,moneyTarget:false,progress:0,done:false,failed:false};
+  }
+  return picked;
+}
+function missionDoneCount(){ return S&&S.missions? S.missions.filter(function(m){return m.done;}).length:0; }
+function addMissionProgress(type, amount){
+  if(!S||S.over||!S.missions) return;
+  var changed=false;
+  S.missions.forEach(function(m){
+    if(m.type!==type||m.done||m.failed) return;
+    if(type==="safe") return; /* dinilai di akhir hari */
+    m.progress=Math.min(m.target, m.progress+amount);
+    changed=true;
+    if(m.progress>=m.target){
+      m.done=true; S.totalMissionsDone=(S.totalMissionsDone||0)+1;
+      S.money+=m.rewardMoney;
+      aliveGfs().forEach(function(g){ addAff(g, m.rewardAff); });
+      log("🎯 MISI SELESAI: "+m.title+" — hadiah "+fmtRp(m.rewardMoney)+" + affection semua +"+m.rewardAff+"!");
+      toast("🎯 Misi selesai: "+m.title+"! +"+fmtRp(m.rewardMoney));
+    }
+  });
+  if(changed){ renderHUD(); save(); }
+}
+function openMissions(){
+  if(!S) return;
+  var streak=S.missionStreak||0;
+  var html="<h2>🎯 Misi Hari ke-"+S.day+"</h2><p>Streak harian: <b style='color:var(--gold)'>🔥 "+streak+" hari</b> • Selesai: <b style='color:var(--ink)'>"+missionDoneCount()+"/"+(S.missions?S.missions.length:0)+"</b></p>"+
+    "<p>Selesaikan misi untuk hadiah langsung (uang + affection semua pacar). Kalau <b style='color:var(--ink)'>semua misi selesai</b>, malam ini ada bonus harian Rp100.000 + affection +5 dan streak naik. <b style='color:var(--red)'>Misi yang gagal</b> saat hari berakhir: suspicion pacar acak +8 per misi gagal, streak putus, tanpa bonus.</p>";
+  if(S.missions&&S.missions.length){
+    html+=S.missions.map(function(m){
+      var pct=m.type==="safe"? (m.done?100:(S.caughtToday?0:60)) : Math.round(m.progress/m.target*100);
+      var progTxt=m.type==="safe"? (m.done?"✓ Aman seharian":(S.caughtToday?"✗ Sudah ketahuan hari ini":"Bertahan… dinilai malam ini")) : (m.moneyTarget? fmtRp(m.progress)+" / "+fmtRp(m.target) : m.progress+" / "+m.target);
+      return '<div class="missionitem'+(m.done?" done":m.failed?" failed":"")+'"><div class="mtitle"><span>'+m.icon+" "+m.title+'</span><span>'+(m.done?"✅":m.failed?"❌":progTxt)+'</span></div><div class="mbar"><i style="width:'+pct+'%"></i></div><div class="mdesc">'+m.desc+'<br>Hadiah: '+fmtRp(m.rewardMoney)+' + affection +'+m.rewardAff+'</div></div>';
+    }).join("");
+  } else html+="<p>Belum ada misi.</p>";
+  html+='<button class="bigbtn" onclick="closeModal()">Siap, Gas!</button>';
+  openModal(html);
+}
+
 /* ---------------- STATE ---------------- */
 var S = null;
 var uidCounter = 1;
@@ -740,7 +831,7 @@ function defaultState(mode, gender){
   uidCounter = 1;
   var st = { mode:mode, gender: (gender==="cewek"?"cewek":"cowok"), totalDays: mode===7?7:30, day:1, slot:0, money:600000, energy:100,
     gfs:[], upgrades:{hp2:false, mobil:false, alibi:false}, caughtThisWeek:0, weekCaughtReset:1,
-    totalCaught:0, over:false, log:[] };
+    totalCaught:0, over:false, log:[], missions:genMissions(1), missionStreak:0, caughtToday:false, totalMissionsDone:0 };
   S = st;
   mainPartners().forEach(function(d){ var c={}; for(var k in d)c[k]=d[k]; c.main=true; st.gfs.push(newGf(c)); });
   S = st;
@@ -754,7 +845,7 @@ function save(){
 }
 function loadSave(){
   try{ var raw=localStorage.getItem(SAVE_KEY); if(!raw) return null;
-    var data=JSON.parse(raw); if(data && data.S && !data.S.over){ uidCounter=data.uid||100; if(data.S.gender!=="cewek"&&data.S.gender!=="cowok") data.S.gender="cowok"; /* Save lama (sebelum ada tahap kenalan): semua yang sudah ada = pacar resmi. */ data.S.gfs.forEach(function(g){ if(g.stage!=="kenalan"&&g.stage!=="pacar") g.stage="pacar"; }); return data.S; } }catch(e){}
+    var data=JSON.parse(raw); if(data && data.S && !data.S.over){ uidCounter=data.uid||100; if(data.S.gender!=="cewek"&&data.S.gender!=="cowok") data.S.gender="cowok"; /* Save lama (sebelum ada tahap kenalan): semua yang sudah ada = pacar resmi. */ data.S.gfs.forEach(function(g){ if(g.stage!=="kenalan"&&g.stage!=="pacar") g.stage="pacar"; }); if(!data.S.missions||!data.S.missions.length) data.S.missions=genMissions(data.S.day||1); if(data.S.missionStreak==null) data.S.missionStreak=0; if(data.S.caughtToday==null) data.S.caughtToday=false; if(data.S.totalMissionsDone==null) data.S.totalMissionsDone=0; return data.S; } }catch(e){}
   return null;
 }
 function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
@@ -804,6 +895,7 @@ function renderHUD(){
   $("hudkenalan").style.display = nKen? "inline":"none";
   $("hudkenalann").textContent = nKen;
   $("hudrank").textContent = "👑 "+rankOf(partnerCount());
+  var mb=$("missionbtn"); if(mb && S.missions){ var dc=missionDoneCount(); mb.textContent="🎯 Misi "+dc+"/"+S.missions.length+" • 🔥"+(S.missionStreak||0); mb.classList.toggle("doneall", dc===S.missions.length && S.missions.length>0); }
   $("hudmoney").textContent = fmtRp(S.money);
   var unread = aliveGfs().reduce(function(a,g){return a+g.unread;},0);
   $("chatbadge").style.display = unread? "inline-flex":"none"; $("chatbadge").textContent = unread;
@@ -912,6 +1004,7 @@ function replyChat(uid, idx){
   }
   var pm=PERSONALITIES[g.pers]||{affMul:1,susMul:1};
   addAff(g, o.aff*pm.affMul);
+  if(o.aff>=4) addMissionProgress("chat",1);
   if(o.sus) addSus(g, o.sus, true);
   g.lastContact=S.day;
   var reacts=["Makasih ya sayang 🥰","Hmm, oke deh…","Kamu selalu tahu cara bikin aku senyum ❤️","Ya udah, hati-hati ya!"];
@@ -1005,6 +1098,7 @@ function finishEat(){
     S.energy=clamp(S.energy+eg,0,100);
     addAff(partner, food.affection); addSus(partner,-2,true);
     partner.lastContact=S.day;
+    addMissionProgress("eat",1);
     log("Makan "+food.name+" bareng "+partner.name+" di Warung Bu Tini. "+meterLabel(partner)+" +"+food.affection+", energi +"+eg+".");
     toast("Makan bareng "+partner.name+" selesai! "+food.icon+" "+meterLabel(partner)+" +"+food.affection+", energi +"+eg+".");
   } else {
@@ -1035,7 +1129,8 @@ function checkGfState(g){
     return;
   }
   if(g.sus>=100){
-    g.gone=true; S.totalCaught++; S.caughtThisWeek++;
+    g.gone=true; S.totalCaught++; S.caughtThisWeek++; S.caughtToday=true;
+    if(S.missions) S.missions.forEach(function(m){ if(m.type==="safe"&&!m.done) m.failed=true; });
     pushMsg(g,"her","AKU TAHU SEMUANYA. KITA PUTUS. 😡💔");
     log("💔 KETAHUAN! "+g.name+" memergokimu dan putus!");
     toast("💔 KETAHUAN oleh "+g.name+"!");
@@ -1073,6 +1168,7 @@ function doWork(){
   if(!needSlot())return;
   var pay=170000+Math.floor(Math.random()*90000);
   S.money+=pay; S.energy=clamp(S.energy-15,0,100);
+  addMissionProgress("work", pay);
   log("Kerja part-time: +"+fmtRp(pay)+".");
   toast("💼 +"+fmtRp(pay)); consumeSlot();
 }
@@ -1137,6 +1233,7 @@ function doDate(uid, locId){
     checkGfState(danger[0]);
   } else toast("❤️ Kencan seru bareng "+g.name+"!");
   pushMsg(g,"her","Makasih ya hari ini, aku seneng banget jalan sama kamu 🥰");
+  addMissionProgress("date",1);
   log(msg); renderAll(); consumeSlot();
 }
 function buyGift(giftId, targetUid){
@@ -1159,6 +1256,7 @@ function buyGift(giftId, targetUid){
   var gain=fav?16:7;
   addAff(g, gain*(PERSONALITIES[g.pers].affMul||1)); addSus(g,-3,true);
   pushMsg(g,"her", fav? "YA AMPUN ini yang aku mau banget!! Makasih sayang 😍" : "Makasih ya hadiahnya! 😊");
+  addMissionProgress("gift",1);
   log("Memberi "+gift.name+" ke "+g.name+": "+meterLabel(g).toLowerCase()+" +"+gain+(fav?" (favorit!)":"")+".");
   toast(fav? "🎁 Favoritnya! "+meterLabel(g)+" +"+gain : "🎁 "+meterLabel(g)+" +"+gain);
   renderAll(); save();
@@ -1234,6 +1332,7 @@ function attemptPdktLine(idx){
     S.gfs.push(g);
     pushMsg(g,"her","Hai! Seneng banget kenalan sama kamu tadi 😊");
     g.unread=1;
+    addMissionProgress("meet",1);
     log("🤝 KENALAN BARU! "+g.name+" ("+g.job+") — kedekatan "+startCloseness+"%. Belum pacar! Naikkan kedekatannya lewat chat, kencan & hadiah, lalu tembak dia di tab Pacar.");
     toast("🤝 Kenalan baru: "+g.name+"! Kedekatan "+startCloseness+"% — belum pacar.");
     spawnNpcFor(g);
@@ -1286,6 +1385,7 @@ function doSleep(){ if(S.over)return; S.slot=3; endDay(); }
 
 /* ---------------- DAY CYCLE ---------------- */
 function endDay(){
+  var finishedDay=S.day;
   /* Evaluasi harian */
   eachGf(function(g){
     if(g.lastContact < S.day){
@@ -1295,25 +1395,63 @@ function endDay(){
     } else if(Math.random()<0.45){ gfAsk(g); }
     if(g.pers==="Materialistis" && S.money<100000) addAff(g,-5);
     g.giftedToday=false;
-    /* pindah lokasi untuk besok */
     g.loc=LOCATIONS[1+Math.floor(Math.random()*(LOCATIONS.length-1))].id;
     checkGfState(g);
   });
   if(S.over) return;
-  /* Event acak */
+  /* ---- Evaluasi MISI HARIAN ---- */
+  var missionReportHtml="", missionLines=[];
+  if(S.missions && S.missions.length){
+    S.missions.forEach(function(m){
+      if(m.type==="safe" && !S.caughtToday && !m.failed){ m.done=true; m.progress=1; S.totalMissionsDone=(S.totalMissionsDone||0)+1; S.money+=m.rewardMoney; aliveGfs().forEach(function(g){ addAff(g,m.rewardAff); }); }
+      if(!m.done) m.failed=true;
+    });
+    var failedMissions=S.missions.filter(function(m){return !m.done;});
+    var doneMissions=S.missions.filter(function(m){return m.done;});
+    var penaltyNames=[];
+    if(failedMissions.length===0){
+      S.missionStreak=(S.missionStreak||0)+1;
+      S.money+=100000;
+      aliveGfs().forEach(function(g){ addAff(g,5); });
+      missionLines.push("🎉 SEMUA MISI SELESAI! Bonus harian +Rp100.000, affection semua +5, streak naik jadi 🔥 "+S.missionStreak+" hari.");
+      log("🎯 Semua misi hari ke-"+finishedDay+" selesai! Bonus Rp100.000, streak 🔥 "+S.missionStreak+".");
+    } else {
+      var oldStreak=S.missionStreak||0;
+      S.missionStreak=0;
+      failedMissions.forEach(function(m){
+        var victim=randomGf();
+        if(victim){ addSus(victim,8,true); penaltyNames.push(victim.name); checkGfState(victim); }
+        missionLines.push("❌ Gagal: "+m.title+" → "+(victim? victim.name+" makin curiga (+8 suspicion)":"tidak ada pacar untuk kena dampak")+".");
+      });
+      missionLines.push("🔥 Streak putus"+(oldStreak? " (tadinya "+oldStreak+" hari)":"")+" dan tidak ada bonus harian malam ini.");
+      log("🎯 "+failedMissions.length+" misi gagal hari ke-"+finishedDay+": streak putus, suspicion naik untuk "+penaltyNames.join(", ")+".");
+      doneMissions.forEach(function(m){ missionLines.unshift("✅ Berhasil: "+m.title+" (hadiah sudah diterima saat misi selesai)."); });
+    }
+    if(S.over) return;
+    missionReportHtml="<h2>🌙 Laporan Malam — Hari ke-"+finishedDay+"</h2><p><b style='color:var(--ink)'>Misi: "+doneMissions.length+"/"+S.missions.length+" berhasil</b> • Streak: 🔥 "+(S.missionStreak||0)+"</p>"+
+      S.missions.map(function(m){ return '<div class="missionitem'+(m.done?" done":" failed")+'"><div class="mtitle"><span>'+m.icon+" "+m.title+'</span><span>'+(m.done?"✅ Berhasil":"❌ Gagal")+'</span></div><div class="mdesc">'+m.desc+'</div></div>'; }).join("")+
+      missionLines.map(function(l){return "<p>"+l+"</p>";}).join("");
+  }
+  /* Event acak — digabung ke laporan malam supaya tidak menimpa modal misi */
+  var eventHtml="";
   if(Math.random()<0.38){
     var ev=EVENTS[Math.floor(Math.random()*EVENTS.length)];
     ev.apply();
-    openModal("<h2>"+ev.title+"</h2><p>"+ev.text+"</p><button class='bigbtn' onclick='closeModal()'>Deg-degan… Lanjut</button>");
+    eventHtml="<h2 style='margin-top:14px'>"+ev.title+"</h2><p>"+ev.text+"</p>";
     log("Event: "+ev.title);
   }
-  S.day++; S.slot=0; S.energy=100;
+  if(S.over) return;
+  S.day++; S.slot=0; S.energy=100; S.caughtToday=false;
   if(S.day - S.weekCaughtReset >= 7){ S.caughtThisWeek=0; S.weekCaughtReset=S.day; }
   relocateNpcs();
   if(S.day>S.totalDays){ endGame(true); return; }
-  log("— Hari baru: Hari ke-"+S.day+" —");
-  toast("🌅 Hari ke-"+S.day+" dari "+S.totalDays);
+  S.missions=genMissions(S.day);
+  log("— Hari baru: Hari ke-"+S.day+" — Misi baru sudah terbit, cek tombol 🎯 Misi!");
+  toast("🌅 Hari ke-"+S.day+" dari "+S.totalDays+" — misi baru terbit!");
   renderAll(); save();
+  if(missionReportHtml||eventHtml){
+    openModal((missionReportHtml||"<h2>🌙 Laporan Malam — Hari ke-"+finishedDay+"</h2>")+eventHtml+"<p style='margin-top:10px'><b style='color:var(--gold)'>🎯 Misi besok (Hari ke-"+S.day+"):</b> "+S.missions.map(function(m){return m.icon+" "+m.title;}).join(" • ")+"</p><button class='bigbtn' onclick='closeModal()'>Lanjut ke Hari "+S.day+"</button>");
+  }
 }
 function endGame(finished, reason){
   if(S.over) return; S.over=true;
@@ -1329,7 +1467,7 @@ function endGame(finished, reason){
   else { title="💔 JOMBLO KEMBALI"; desc= finished? "Kamu mencapai hari terakhir tanpa satu pun pacar resmi — semua hubunganmu berhenti di status kenalan. Banyak kenalan, nol jadian. Kurang berani menembak!" : "Semua pacar pergi sebelum hari terakhir."; }
   clearSave();
   openModal("<div class='center'><h2 style='font-size:1.6rem'>"+title+"</h2><p>"+desc+"</p>"+
-    "<p style='font-size:1.05rem;color:var(--ink)'><b>Skor akhir: "+score+"</b><br>Pacar dipertahankan: "+n+(kenalanGfs().length? " + "+kenalanGfs().length+" kenalan":"")+" • Rata-rata affection: "+Math.round(avg)+"<br>Total ketahuan: "+S.totalCaught+" • Rank: "+rankOf(n)+"</p>"+
+    "<p style='font-size:1.05rem;color:var(--ink)'><b>Skor akhir: "+score+"</b><br>Pacar dipertahankan: "+n+(kenalanGfs().length? " + "+kenalanGfs().length+" kenalan":"")+" • Rata-rata affection: "+Math.round(avg)+"<br>Total ketahuan: "+S.totalCaught+" • Rank: "+rankOf(n)+"<br>🎯 Total misi selesai: "+(S.totalMissionsDone||0)+" • Streak terakhir: 🔥 "+(S.missionStreak||0)+"</p>"+
     "<button class='bigbtn' onclick='closeModal();showStart()'>Main Lagi</button></div>");
   renderAll();
 }
@@ -1452,6 +1590,7 @@ function showHowTo(){
     "<p>• <b style='color:var(--ink)'>Makan di warung beneran:</b> di Warung Bu Tini, pesan dari menu (nasi goreng, mie ayam, sate, nasi padang rendang, es teh, kopi, es jeruk) dan karaktermu akan duduk di meja warung dan makan dengan animasi menyuap sampai piringnya kosong. Makan sendiri memulihkan energi tanpa memakai slot waktu; traktir pacar makan bareng menaikkan affection-nya juga.</p>"+
     "<p>• <b style='color:var(--ink)'>Nambah pacar (bertahap!):</b> "+pw+" yang lewat di jalan/mal bertanda 💬 di atas kepalanya. Dekati dia sampai tombol <b style='color:var(--ink)'>💬 Ajak Kenalan</b> muncul (atau ketuk langsung orangnya), lalu pilih kalimat pembuka PDKT yang tepat. PDKT berhasil baru membuatnya jadi <b style='color:var(--ink)'>🤝 Kenalan</b> — belum terhitung pacar &amp; rank. Naikkan <b style='color:var(--ink)'>meter kedekatannya</b> lewat balasan chat yang baik, ajak kencan, dan beri hadiah; setelah mencapai <b style='color:var(--ink)'>70%</b>, tekan <b style='color:var(--ink)'>💘 Tembak / Jadian</b> di tab Pacar. Ditembak terlalu dini = ditolak dan kedekatan turun 6! Jumlah pacar tetap tanpa batas. Tombol 💘 Kenalan di bilah aksi juga bisa dipakai kapan pun.</p>"+
     "<p>• Rank naik mengikuti jumlah pacar: Pemula → "+(S&&S.gender==="cewek"?"Playgirl":"Playboy")+" Amatir → Master Hati → "+(S&&S.gender==="cewek"?"Ratu":"Raja")+" Harem → Legenda Tanpa Jejak (12+).</p>"+
+    "<p>• <b style='color:var(--ink)'>Misi Harian:</b> tiap hari ada 3 misi acak (tombol 🎯 Misi di HUD, progresnya seperti 1/3). Contoh: kencan 2x, hasilkan Rp150.000 dari kerja, 3 chat menyenangkan, kenalan 1 orang baru, traktir makan di warung, atau jangan ketahuan seharian. Misi selesai = hadiah langsung uang + affection. Semua misi selesai = bonus malam Rp100.000 + streak 🔥 naik. Misi gagal saat tidur/hari berakhir = suspicion pacar acak +8 per misi, streak putus, tanpa bonus — semua tertulis di Laporan Malam.</p>"+
     "<p>• Beli upgrade penyelamat: HP Kedua, Mobil, dan Teman Alibi di Toko.</p></div>"+
     "<button class='bigbtn' onclick='closeModal()'>Siap, Gas!</button>");
 }
@@ -1529,27 +1668,38 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
   renderer.shadowMap.enabled=true;
   var scene=new THREE.Scene();
   scene.background=new THREE.Color(0x1a1440);
-  scene.fog=new THREE.Fog(0x1a1440, 60, 185);
-  var camera=new THREE.PerspectiveCamera(58, 1.6, 0.1, 300);
+  scene.fog=new THREE.Fog(0x1a1440, 70, 250);
+  var camera=new THREE.PerspectiveCamera(58, 1.6, 0.1, 420);
   scene.add(new THREE.HemisphereLight(0xbfb8ff, 0x2a2140, 0.95));
   var sun=new THREE.DirectionalLight(0xfff2d9, 1.1);
   sun.position.set(30,45,20); sun.castShadow=true;
   sun.shadow.mapSize.set(1024,1024);
-  sun.shadow.camera.left=-88; sun.shadow.camera.right=88; sun.shadow.camera.top=88; sun.shadow.camera.bottom=-88;
+  sun.shadow.camera.left=-130; sun.shadow.camera.right=130; sun.shadow.camera.top=130; sun.shadow.camera.bottom=-130;
   scene.add(sun);
   var moon=new THREE.Mesh(new THREE.SphereGeometry(3,16,16), new THREE.MeshBasicMaterial({color:0xffe9a8}));
   moon.position.set(-45,38,-70); scene.add(moon);
 
   /* ---------- ground & roads ---------- */
-  var ground=new THREE.Mesh(new THREE.PlaneGeometry(180,180), new THREE.MeshLambertMaterial({color:0x2e2a55}));
+  var ground=new THREE.Mesh(new THREE.PlaneGeometry(280,280), new THREE.MeshLambertMaterial({color:0x2e2a55}));
   ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+  /* Lapangan rumput taman & tanah distrik supaya tiap kawasan terasa beda warna */
+  [[-26,16,34,26,0x2f6b3a],[30,22,36,28,0x8a6d3b],[-58,-36,30,24,0x3a3f4a],[6,-58,38,26,0x4a3a5e],[26,50,34,26,0x2a5a7a]].forEach(function(p){
+    var patch=new THREE.Mesh(new THREE.PlaneGeometry(p[2],p[3]), new THREE.MeshLambertMaterial({color:p[4]}));
+    patch.rotation.x=-Math.PI/2; patch.position.set(p[0],0.015,p[1]); patch.receiveShadow=true; scene.add(patch);
+  });
   var roadMat=new THREE.MeshLambertMaterial({color:0x191530});
-  /* 6 jalan: 3 timur–barat (z=-9, 12, 40) + 3 utara–selatan (x=-13, 15, 42) —
-     menghubungkan distrik lama dengan distrik timur (warung, pasar malam)
-     dan distrik selatan (Kampung Melati, Danau Biru). */
-  [[180,7,0,-9],[180,7,0,12],[180,7,0,40],[7,180,-13,0],[7,180,15,0],[7,180,42,0]].forEach(function(r){
+  var lineMat=new THREE.MeshBasicMaterial({color:0xfacc15});
+  /* 10 jalan: 5 timur–barat + 5 utara–selatan — menghubungkan semua distrik:
+     lama, timur (warung/pasar), selatan (kampung/danau), barat (stasiun), utara (alun-alun/pusat kota). */
+  [[280,7,0,-9],[280,7,0,12],[280,7,0,40],[280,7,0,68],[280,7,0,-52],[7,280,-13,0],[7,280,15,0],[7,280,42,0],[7,280,-52,0],[7,280,72,0]].forEach(function(r){
     var road=new THREE.Mesh(new THREE.PlaneGeometry(r[0],r[1]), roadMat);
     road.rotation.x=-Math.PI/2; road.position.set(r[2],0.02,r[3]); road.receiveShadow=true; scene.add(road);
+    /* garis tengah jalan putus-putus supaya jalan terasa hidup */
+    var isH=r[0]>r[1];
+    for(var li2=-12; li2<=12; li2+=2){
+      var dash=new THREE.Mesh(new THREE.PlaneGeometry(isH?3:0.35, isH?0.35:3), lineMat);
+      dash.rotation.x=-Math.PI/2; dash.position.set(isH? li2*10 : r[2], 0.03, isH? r[3] : li2*10); scene.add(dash);
+    }
   });
 
   function textSprite(text, opts){
@@ -1647,6 +1797,50 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     house.position.set(kampungLoc.x+off[0],0,kampungLoc.z+off[1]); scene.add(house);
     decorColliders.push({x:kampungLoc.x+off[0], z:kampungLoc.z+off[1], w:3.4, d:3.0});
   });
+  /* ---------- Dekor distrik: Taman (air mancur+ bangku), Pantai (payung+palem), Stasiun (peron+kereta), Alun-Alun, Mobil, Danau (dermaga) ---------- */
+  (function(){
+    function box(w,h,d,color,x,y,z,parent){ var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshLambertMaterial({color:color})); m.position.set(x,y,z); m.castShadow=true; (parent||scene).add(m); return m; }
+    function cyl(rt,rb,h,color,x,y,z,parent){ var m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,12), new THREE.MeshLambertMaterial({color:color})); m.position.set(x,y,z); m.castShadow=true; (parent||scene).add(m); return m; }
+    /* Taman Kota: air mancur di plaza taman + bangku melingkar */
+    var tl=locById("taman");
+    cyl(2.6,2.9,0.5,0x9aa5b1,tl.x,0.25,tl.z+6);
+    var fw=new THREE.Mesh(new THREE.CircleGeometry(2.3,20), new THREE.MeshLambertMaterial({color:0x38bdf8})); fw.rotation.x=-Math.PI/2; fw.position.set(tl.x,0.52,tl.z+6); scene.add(fw);
+    cyl(0.18,0.3,1.5,0x64748b,tl.x,1.2,tl.z+6);
+    var spray=new THREE.Mesh(new THREE.ConeGeometry(0.9,1.4,10), new THREE.MeshLambertMaterial({color:0xbae6fd, transparent:true, opacity:0.75})); spray.position.set(tl.x,2.4,tl.z+6); scene.add(spray);
+    decorColliders.push({x:tl.x,z:tl.z+6,w:5.5,d:5.5});
+    for(var bi=0;bi<5;bi++){ var ba=bi/5*Math.PI*2; box(1.6,0.45,0.5,0x8a5a2b, tl.x+Math.cos(ba)*4.6,0.28, tl.z+6+Math.sin(ba)*4.6); }
+    /* Pantai: payung + pohon palem */
+    var pl=locById("pantai");
+    [[-5,4],[4,6],[-2,-5]].forEach(function(o,i){ cyl(0.07,0.07,2.0,0x8a5a2b,pl.x+o[0],1.0,pl.z+o[1]); var um=new THREE.Mesh(new THREE.ConeGeometry(1.7,0.6,8), new THREE.MeshLambertMaterial({color:[0xef4444,0xf59e0b,0x06b6d4][i]})); um.position.set(pl.x+o[0],2.1,pl.z+o[1]); um.castShadow=true; scene.add(um); });
+    /* Stasiun: peron panjang + kereta statis warna merah */
+    var sl=locById("stasiun");
+    box(16,0.4,3.5,0x6b7280,sl.x,0.2,sl.z+7);
+    var train=new THREE.Group(); box(13,2.2,2.4,0xdc2626,0,1.6,0,train); box(12,0.7,2.5,0xfacc15,0,2.2,0,train); box(2.2,1.8,2.4,0x991b1b,7.2,1.4,0,train); train.position.set(sl.x,0,sl.z+11); scene.add(train);
+    decorColliders.push({x:sl.x,z:sl.z+11,w:15,d:2.6});
+    box(18,0.15,1.2,0x374151,sl.x,0.08,sl.z+9.2);
+    /* Alun-Alun pusat kota: monumen + lampu warna */
+    var al=locById("alun");
+    cyl(1.2,1.6,0.6,0x9aa5b1,al.x,0.3,al.z+6); cyl(0.35,0.5,4.2,0xe2e8f0,al.x,2.4,al.z+6);
+    var orb=new THREE.Mesh(new THREE.SphereGeometry(0.85,14,12), new THREE.MeshLambertMaterial({color:0xf472b6, emissive:0x9d174d})); orb.position.set(al.x,5.2,al.z+6); scene.add(orb);
+    decorColliders.push({x:al.x,z:al.z+6,w:3.2,d:3.2});
+    /* Danau: dermaga kayu + perahu bebek sederhana */
+    var dl=locById("danau");
+    box(1.6,0.18,6,0x8a5a2b,dl.x+2,0.25,dl.z+7);
+    box(1.8,0.6,2.6,0xfacc15,dl.x+2,0.45,dl.z+12.5);
+    /* Mobil-mobil parkir & di jalan (kotak + kabin + roda sederhana) — bikin jalan hidup */
+    var carColors=[0xef4444,0x3b82f6,0xfacc15,0xe5e7eb,0x22c55e,0xf97316,0xa855f7,0x111827];
+    var carSpots=[[-20,-5.5],[22,-12.5],[36,15.5],[-30,43.5],[8,36.5],[48,-5.5],[-48,15.5],[60,43.5],[-8,-48.5],[28,-55.5],[-58,-5.5],[18,71.5]];
+    carSpots.forEach(function(cs,i){
+      var car=new THREE.Group(); var col=carColors[i%carColors.length];
+      box(2.0,0.55,1.05,col,0,0.45,0,car); box(1.1,0.5,0.95,0x1e293b, -0.1,0.95,0,car);
+      car.position.set(cs[0],0,cs[1]); car.rotation.y=(i%3===0? Math.PI/2:0); scene.add(car);
+      decorColliders.push({x:cs[0],z:cs[1],w:2.1,d:1.2});
+    });
+    /* Papan selamat datang distrik */
+    [[-52,-44,"🚉 DISTRIK BARAT"],[54,36,"🎡 DISTRIK TIMUR"],[-34,62,"🏘️ DISTRIK SELATAN"],[6,-70,"🏙️ PUSAT KOTA"]].forEach(function(s){
+      var sp=textSprite(s[2],{bg:"rgba(20,16,42,0.9)", fg:"#ffc94d"}); sp.position.set(s[0],3.4,s[1]); sp.scale.set(7,2.2,1); scene.add(sp);
+    });
+  })();
   /* ---------- lampu jalan di semua jalan utama kota yang diperluas ---------- */
   var lampMat=new THREE.MeshLambertMaterial({color:0xffd97a, emissive:0xffb84d});
   var lampPostMat=new THREE.MeshLambertMaterial({color:0x55506e});
@@ -1656,8 +1850,8 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     var post=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,3.4,6), lampPostMat);
     post.position.set(lx,1.7,lz); scene.add(post);
   }
-  for(var li=-7; li<=7; li++){ [-9,12,40].forEach(function(lz){ addLamp(li*11, lz+4); }); }
-  for(var lj=-3; lj<=3; lj++) addLamp(46, lj*13);
+  for(var li=-11; li<=11; li+=2){ [-9,12,40,68,-52].forEach(function(lz){ addLamp(li*11, lz+4); }); }
+  for(var lj=-5; lj<=5; lj++) { addLamp(46, lj*13); addLamp(-48, lj*13+6); addLamp(76, lj*13); }
   /* ---------- set meja makan Warung Bu Tini (untuk animasi makan) ---------- */
   var warungLoc=locById("warung");
   var dining={ x:warungLoc.x, z:warungLoc.z+5.4, food:[], steam:[] };
@@ -1708,7 +1902,11 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
   /* Gedung latar — termasuk distrik timur & selatan; ikut jadi penabrak. */
   var bgColliders=[];
   var bColors=["#4a3f8f","#5b4a9e","#3d3377","#6b5aa8","#54468f"];
-  var BUILDINGS=[[-38,-30,10,10,22],[-12,-34,9,9,16],[14,-34,10,9,26],[38,-30,10,10,18],[-38,-4,10,9,14],[38,-6,10,10,24],[-38,28,10,10,19],[12,34,10,9,15],[38,34,9,9,21],[-16,12,8,8,12],[6,-14,8,8,17],[22,12,7,7,11],[-56,-30,10,10,20],[62,-32,10,9,17],[-58,8,9,10,15],[64,30,10,9,23],[-8,-52,10,9,25],[30,-52,9,9,14],[-56,58,10,9,13],[52,58,10,10,19],[6,58,9,9,16],[-58,34,9,9,18]];
+  var BUILDINGS=[[-38,-30,10,10,22],[-12,-34,9,9,16],[14,-34,10,9,26],[38,-30,10,10,18],[-38,-4,10,9,14],[38,-6,10,10,24],[-38,28,10,10,19],[12,34,10,9,15],[38,34,9,9,21],[-16,12,8,8,12],[6,-14,8,8,17],[22,12,7,7,11],[-56,-30,10,10,20],[62,-32,10,9,17],[-58,8,9,10,15],[64,30,10,9,23],[-8,-52,10,9,25],[30,-52,9,9,14],[-56,58,10,9,13],[52,58,10,10,19],[6,58,9,9,16],[-58,34,9,9,18],
+  /* Pusat kota: gedung pencakar langit di utara */
+  [-22,-68,11,11,42],[22,-68,11,10,38],[42,-66,10,10,34],[-42,-66,10,10,30],[0,-78,12,11,46],[62,-58,10,10,28],[-68,-58,10,10,26],
+  /* Perluasan timur & barat & selatan */
+  [84,-30,10,10,20],[84,18,10,9,16],[-84,-18,10,10,18],[-84,38,9,9,15],[84,58,10,10,22],[-84,68,10,9,17],[38,78,10,9,18],[-28,78,10,10,15],[68,78,9,9,20]];
   BUILDINGS.forEach(function(bd, bi){
     var tex=windowTexture(bColors[bi%bColors.length]);
     var b=new THREE.Mesh(new THREE.BoxGeometry(bd[2],bd[4],bd[3]),
@@ -1716,9 +1914,9 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     b.position.set(bd[0],bd[4]/2,bd[1]); b.castShadow=true; scene.add(b);
     bgColliders.push({x:bd[0], z:bd[1], w:bd[2], d:bd[3]});
   });
-  /* trees */
-  for(var ti=0; ti<40; ti++){
-    var tx=(Math.random()*160-80), tz=(Math.random()*160-80);
+  /* trees — lebih banyak & menyebar ke seluruh kota 280x280, padat di taman/kampung */
+  for(var ti=0; ti<70; ti++){
+    var tx=(Math.random()*250-125), tz=(Math.random()*240-120);
     if(LOCATIONS.some(function(l){return Math.hypot(l.x-tx,l.z-tz)<9;})) continue;
     var trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.24,1.4), new THREE.MeshLambertMaterial({color:0x7a5230}));
     trunk.position.set(tx,0.7,tz); scene.add(trunk);
@@ -1880,7 +2078,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     var targetFemale=partnersFemale();
     PED_LOOKS.forEach(function(look, i){
       var mesh=makePerson(look);
-      mesh.position.set((Math.random()-0.5)*120,0,(Math.random()-0.5)*110);
+      mesh.position.set((Math.random()-0.5)*200,0,(Math.random()-0.5)*190);
       pedGroup.add(mesh);
       var approachable = look.female===targetFemale;
       var indicator=null;
@@ -1890,16 +2088,16 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
         mesh.add(indicator);
         registerTap(mesh,{npcKey:i});
       }
-      peds.push({mesh:mesh, tx:(Math.random()-0.5)*120, tz:(Math.random()-0.5)*110,
+      peds.push({mesh:mesh, tx:(Math.random()-0.5)*200, tz:(Math.random()-0.5)*190,
         speed:1.6+Math.random(), approachable:approachable, indicator:indicator});
     });
   }
   dismissPedestrian=function(key){
     var ped=peds[key]; if(!ped) return;
-    var nx=(Math.random()-0.5)*120, nz=(Math.random()-0.5)*110;
+    var nx=(Math.random()-0.5)*200, nz=(Math.random()-0.5)*190;
     if(Math.hypot(nx-P.x,nz-P.z)<22){ nx=-P.x*0.8; nz=-P.z*0.8; }
     ped.mesh.position.set(nx,0,nz);
-    ped.tx=(Math.random()-0.5)*120; ped.tz=(Math.random()-0.5)*110;
+    ped.tx=(Math.random()-0.5)*200; ped.tz=(Math.random()-0.5)*190;
   };
   function nearestLocationId(x,z){
     var best=LOCATIONS[0].id, bd=1e9;
@@ -1932,7 +2130,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       if(len>1){ dx/=len; dy/=len; }
       if(Math.hypot(dx,dy)<0.12){ dx=0; dy=0; } /* zona mati: diam tidak merayap */
       joyVec.x=dx; joyVec.y=dy;
-      setKnob(dx*30, dy*30);
+      setKnob(dx*38, dy*38);
     }
     function reset(){
       joyPointer=null; joyVec.x=0; joyVec.y=0;
@@ -2032,18 +2230,34 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
   var warn=document.getElementById("warnbanner");
   function drawRadar(){
     rx.clearRect(0,0,118,118);
+    /* Latar peta mini kota 280: jalan-jalan utama digambar sebagai garis */
+    rx.fillStyle="rgba(20,24,52,0.9)"; rx.beginPath(); rx.arc(59,59,57,0,6.29); rx.fill();
+    var W2R=57/135; /* dunia -135..135 -> radar */
+    function w2rx(x){ return 59+x*W2R; } function w2ry(z){ return 59+z*W2R; }
+    rx.strokeStyle="rgba(255,255,255,0.28)"; rx.lineWidth=2;
+    [-52,-9,12,40,68].forEach(function(z){ rx.beginPath(); rx.moveTo(4,w2ry(z)); rx.lineTo(114,w2ry(z)); rx.stroke(); });
+    [-52,-13,15,42,72].forEach(function(x){ rx.beginPath(); rx.moveTo(w2rx(x),4); rx.lineTo(w2rx(x),114); rx.stroke(); });
     rx.strokeStyle="rgba(255,255,255,0.35)"; rx.lineWidth=1;
     [26,50].forEach(function(r){ rx.beginPath(); rx.arc(59,59,r,0,6.29); rx.stroke(); });
+    /* Semua lokasi di peta baru: titik berwarna per distrik */
+    LOCATIONS.forEach(function(l){
+      rx.fillStyle="#"+new THREE.Color(l.color).getHexString();
+      rx.beginPath(); rx.arc(w2rx(l.x),w2ry(l.z),3.2,0,6.29); rx.fill();
+      rx.strokeStyle="rgba(255,255,255,0.7)"; rx.lineWidth=1; rx.stroke();
+    });
+    /* Pemain: segitiga cyan mengikuti posisi absolut di peta kota */
     rx.fillStyle="#5dd6ff";
-    rx.beginPath(); rx.moveTo(59,50); rx.lineTo(53,68); rx.lineTo(65,68); rx.closePath(); rx.fill();
+    var ppx=w2rx(P.x), ppy=w2ry(P.z);
+    rx.beginPath(); rx.moveTo(ppx,ppy-6); rx.lineTo(ppx-5,ppy+5); rx.lineTo(ppx+5,ppy+5); rx.closePath(); rx.fill();
+    rx.strokeStyle="#fff"; rx.lineWidth=1.2; rx.stroke();
     var near=0;
     npcs.forEach(function(n){
       var dx=n.mesh.position.x-P.x, dz=n.mesh.position.z-P.z;
       var dist=Math.hypot(dx,dz); if(dist<17 && n.gf.stage!=="kenalan") near++;
-      if(dist>52) return;
-      var px=59+dx/52*50, py=59+dz/52*50;
+      var px=w2rx(n.mesh.position.x), py=w2ry(n.mesh.position.z);
+      if(px<4||px>114||py<4||py>114) return;
       rx.fillStyle=dist<17? "#ff5d5d" : (n.gf.stage==="kenalan"? "#ffc53d":"#ff8fab");
-      rx.beginPath(); rx.arc(px,py,4,0,6.29); rx.fill();
+      rx.beginPath(); rx.arc(px,py,3.6,0,6.29); rx.fill();
     });
     if(near>0){ warn.style.display="block"; warn.textContent="⚠ "+near+" pacar dekat!"; }
     else warn.style.display="none";
@@ -2171,9 +2385,9 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       var sin=Math.sin(P.camYaw), cos=Math.cos(P.camYaw);
       /* Maju = arah pandang kamera (-sin,-cos); kanan = (cos,-sin) */
       var wx=cos*ix + sin*iz, wz=-sin*ix + cos*iz;
-      var sp=11;
-      P.x=THREE.MathUtils.clamp(P.x+wx*sp*dt,-80,80);
-      P.z=THREE.MathUtils.clamp(P.z+wz*sp*dt,-74,74);
+      var sp=12;
+      P.x=THREE.MathUtils.clamp(P.x+wx*sp*dt,-128,128);
+      P.z=THREE.MathUtils.clamp(P.z+wz*sp*dt,-122,122);
       P.heading=Math.atan2(wx,wz);
       speed=Math.min(1,mag);
     }
@@ -2220,7 +2434,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
     peds.forEach(function(ped, i){
       var dx=ped.tx-ped.mesh.position.x, dz=ped.tz-ped.mesh.position.z, dist=Math.hypot(dx,dz);
       var pSpeed=0;
-      if(dist<1.2){ ped.tx=(Math.random()-0.5)*120; ped.tz=(Math.random()-0.5)*110; }
+      if(dist<1.2){ ped.tx=(Math.random()-0.5)*200; ped.tz=(Math.random()-0.5)*190; }
       else {
         var vx=dx/dist, vz=dz/dist;
         ped.mesh.position.x+=vx*ped.speed*dt; ped.mesh.position.z+=vz*ped.speed*dt;
@@ -2256,7 +2470,7 @@ var movePlayerTo=function(){}, spawnNpcFor=function(){}, rebuildNpcs=function(){
       hintEl.classList.toggle("open", !!showHint);
       if(showHint){
         var pw=(S.gender==="cewek")? "Cowok":"Cewek";
-        document.getElementById("cityhinttext").innerHTML="🗺️ <b>Kota diperluas!</b> 👆 <b>Ketuk gedung lokasi</b> untuk ajak kencan ke sana. 🍜 Di <b>Warung Bu Tini</b> (distrik timur) kamu bisa makan beneran. "+pw+" bertanda 💬 yang lewat bisa <b>diajak kenalan</b> — dekati dia!";
+        document.getElementById("cityhinttext").innerHTML="🗺️ <b>Kota makin luas!</b> 👆 <b>Ketuk gedung lokasi</b> untuk ajak kencan. 🚉 Stasiun di barat, 🏙️ Alun-Alun di utara, 🌳 Taman berair mancur, 🎯 cek <b>Misi Harian</b> di HUD. "+pw+" bertanda 💬 bisa <b>diajak kenalan</b> — dekati dia!";
       }
     }
     /* camera — selama animasi makan: posisi sinematik di samping meja warung */
